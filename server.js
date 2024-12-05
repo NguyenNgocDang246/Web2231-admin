@@ -45,13 +45,14 @@ app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", "./views");
 
-app.use("/page", require("./routes/page"));
-app.use("/product", require("./routes/product"));
-app.use("/user", require("./routes/user/normalUser"));
-app.use("/cart", require("./routes/cart"));
+app.use("/product", require("./routes/product.r"));
+app.use("/", require("./routes/home"));
+
+app.use((err, req, res, next) => {
+  res.status(500).send(err);
+});
 
 const { connectDB } = require("./models/db");
-
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
