@@ -48,11 +48,34 @@ app.set("views", "./views");
 app.use("/product", require("./routes/product.r"));
 app.use("/", require("./routes/home"));
 
-app.use((err, req, res, next) => {
-  res.status(500).send(err);
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "img-src 'self' data:; default-src 'self';"
+  );
+  next();
 });
 
-const { connectDB } = require("./models/db");
+app.use((err, req, res, next) => {
+  if (app.get("env") === "development") {
+    // Chỉ hiển thị lỗi trong môi trường development
+    res.status(err.status || 500).render("error", {
+      title: "Lỗi",
+      message: err.message,
+      error: err, // Gửi thông tin lỗi chi tiết
+    });
+  } else {
+    // Trong production, chỉ hiển thị thông báo chung
+    res.status(err.status || 500).render("error", {
+      title: "Lỗi",
+      message: "Đã xảy ra lỗi, vui lòng thử lại sau!",
+      error: {}, // Không gửi chi tiết lỗi
+    });
+  }
+});
+
+const { connectDB } = require("./configs/db/db");
+const { title } = require("process");
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
