@@ -2,3 +2,13 @@ a {
     text-decoration: none !important;
     color: inherit !important;
 }
+
+.bg-orange {
+    background-color: #ff7f00 !important; /* Cam đậm */
+    color: white;
+}
+
+.dropdown-item:hover {
+    background-color: #ff7f00 !important; /* Cam đậm */
+    color: white;
+}
