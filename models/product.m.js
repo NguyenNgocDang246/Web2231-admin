@@ -15,20 +15,24 @@ const productSchema = new mongoose.Schema({
 });
 
 // Tạo model từ schema
-const Product = mongoose.model("Product", productSchema, "products");
+const Product = mongoose.model("product", productSchema, "products");
 
 module.exports = {
   all: async (page = 1, productPerPage = null) => {
     try {
       if (productPerPage) {
-        const skip = (page - 1) * productsPerPage;
+        const skip = (page - 1) * productPerPage;
         const products = await Product.find()
+          .populate("category_id")
+          .populate("brand_id")
           .skip(skip)
           .limit(productPerPage)
           .lean();
         return products;
       } else {
         const products = await Product.find()
+          .populate("category_id")
+          .populate("brand_id")
           .skip(page - 1)
           .lean();
         return products;
@@ -39,7 +43,10 @@ module.exports = {
   },
   one: async (id) => {
     try {
-      const product = await Product.findById(id).lean();
+      const product = await Product.findById(id)
+        .populate("category_id")
+        .populate("brand_id")
+        .lean();
       return product;
     } catch (e) {
       throw e;
@@ -50,6 +57,8 @@ module.exports = {
       const skip = (page - 1) * productPerPage;
       if (productPerPage) {
         const products = await Product.find(condition)
+          .populate("category_id")
+          .populate("brand_id")
           .sort(sort)
           .skip(skip)
           .limit(productPerPage)
@@ -57,6 +66,8 @@ module.exports = {
         return products;
       } else {
         const products = await Product.find(condition)
+          .populate("category_id")
+          .populate("brand_id")
           .sort(sort)
           .skip(skip)
           .lean();

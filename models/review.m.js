@@ -16,7 +16,7 @@ const reviewSchema = new mongoose.Schema(
 );
 
 // Tạo model từ schema
-const Reviews = mongoose.model("Reviews", reviewSchema, "reviews");
+const Reviews = mongoose.model("review", reviewSchema, "reviews");
 
 module.exports = {
   all: async (page = 1, reviewPerPage = null) => {

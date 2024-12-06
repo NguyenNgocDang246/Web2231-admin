@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // Tạo model từ schema
-const Users = mongoose.model("Users", userSchema, "users");
+const Users = mongoose.model("user", userSchema, "users");
 
 module.exports = {
   all: async (page = 1, userPerPage = null) => {

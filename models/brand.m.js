@@ -11,7 +11,7 @@ const brandSchema = new mongoose.Schema(
 );
 
 // Tạo model từ schema
-const Brands = mongoose.model("Brands", brandSchema, "brands");
+const Brands = mongoose.model("brand", brandSchema, "brands");
 
 module.exports = {
   all: async (page = 1, brandPerPage = null) => {

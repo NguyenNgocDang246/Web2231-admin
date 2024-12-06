@@ -7,7 +7,7 @@ const categorySchema = new mongoose.Schema({
 });
 
 // Tạo model từ schema
-const Category = mongoose.model("Category", categorySchema, "categories");
+const Category = mongoose.model("category", categorySchema, "categories");
 
 module.exports = {
   all: async (page = 1, categoryPerPage = null) => {
