@@ -70,4 +70,12 @@ module.exports = {
       console.error("Error:", e);
     }
   },
+  admins: async () => {
+    try {
+      const admins = await Users.find({ role: "admin" }).lean();
+      return admins;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
 };
