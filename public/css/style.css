@@ -1,14 +1,74 @@
+:root {
+    --sidebar-color: #ff6347;
+    --link-hover-bg: #e2482c;
+}
+
 a {
     text-decoration: none !important;
     color: inherit !important;
 }
 
 .bg-orange {
-    background-color: #ff7f00 !important; /* Cam đậm */
+    background-color: #FF6347 !important; /* Cam đậm */
     color: white;
 }
 
 .dropdown-item:hover {
-    background-color: #ff7f00 !important; /* Cam đậm */
+    background-color: #FF6347 !important; /* Cam đậm */
     color: white;
 }
+
+.text-orange {
+    color: #FF6347 !important; /* Cam đậm */
+}
+
+.border-orange {
+    border: 2px solid #FF6347 !important; /* Cam đậm */
+}
+
+.main-content {
+    margin-top: 8%;
+    margin-bottom: 5%;
+    min-height: 50vh;
+}
+
+.sidebar {
+    border-radius: 5px;
+    margin-top: 5%;
+}
+
+.sidebar .nav-item .nav-link:hover {
+    background-color: var(--link-hover-bg);
+}
+
+@media (max-width: 768px) {
+    #avt-section {
+        display: none;
+    }
+    .sidebar {
+        margin-top: 0;
+    }
+    #admin-sidebar {
+        margin-top: 20%;
+    }
+}
+
+/* Scroll top button */
+#scrollToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 18px;
+    background-color: #ecd9d9;
+    color: black;
+    border: none;
+    border-radius:  50%;
+    cursor: pointer;
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+#scrollToTop:hover {
+    background-color: gray;
+}
+
