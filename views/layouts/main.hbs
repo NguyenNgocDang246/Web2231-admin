@@ -17,10 +17,10 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-orange text-white px-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-orange text-white px-3 fixed-top">
             <div class="container-fluid">
                 <!-- Logo và Tên Thương Hiệu -->
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <a class="navbar-brand d-flex align-items-center" href="/">
                     <img src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-DH-Khoa-Hoc-Tu-Nhien-%E2%80%93-HCMUS-1024x851.png" alt="Logo" class="me-3" style="height: 30px;">
                     <span class="fw-bold">CL STORE</span>
                 </a>
@@ -34,26 +34,17 @@
                 <!-- Nội dung Navbar -->
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <!-- Thanh Tìm Kiếm -->
-                    <form class="d-flex mx-lg-auto my-3 my-lg-0" style="max-width: 300px; width: 100%;">
-                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm..." aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
+                    <div class="d-flex mx-lg-auto ms-auto my-3 my-lg-0 justify-content-end" style="max-width: 300px; width: 100%;">
+                        <form class="d-flex" >
+                            <input class="form-control me-2" type="search" placeholder="Tìm kiếm..." aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
 
                     <!-- Menu Dropdown -->
-                    <div class="d-flex align-items-center ms-auto">
-                        <div class="dropdown me-3">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Sản phẩm
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item" href="/product">Danh sách sản phẩm</a></li>
-                                <li><a class="dropdown-item" href="#">Thêm sản phẩm</a></li>
-                            </ul>
-                        </div>
-
+                    <div class="d-flex align-items-center ms-auto justify-content-end" id="avt-section">
                         <!-- Avatar và Đăng Xuất -->
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
@@ -62,12 +53,12 @@
                                     style="width: 30px; height: 30px;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item fw-bold" href="#">Profile</a></li>
+                                <li><a class="dropdown-item fw-bold" href="#">Settings</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item text-danger" href="#">Đăng xuất</a></li>
+                                <li><a class="dropdown-item text-danger fw-bold" href="/auth/logout">Đăng xuất</a></li>
                             </ul>
                         </div>
                     </div>
@@ -77,6 +68,8 @@
     </header>
 
     {{{body}}}
+
+    <button id="scrollToTop" style="display: none;">⯅</button>
 
     <footer class="bg-body-tertiary text-center">
         <!-- Grid container -->
@@ -153,6 +146,34 @@
         </div>
         <!-- Copyright -->
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const header = document.querySelector("header");
+            const body = document.querySelector(".main-body");
+            if (header) {
+                body.style.paddingTop = `${header.offsetHeight}px`;
+            }
+        });
+
+        // Hiển thị nút khi cuộn xuống
+        window.addEventListener("scroll", function () {
+            const button = document.getElementById("scrollToTop");
+            if (window.scrollY > 300) {
+                button.style.display = "block";
+            } else {
+                button.style.display = "none";
+            }
+        });
+
+        // Cuộn lên đầu trang khi bấm nút
+        document.getElementById("scrollToTop").addEventListener("click", function () {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

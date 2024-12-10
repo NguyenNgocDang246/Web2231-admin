@@ -1,1 +1,44 @@
-<h1>Home</h1>
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-10 content main-content">
+                <div class="row g-4">
+                    <!-- Thống kê -->
+                    <div class="col-md-4">
+                        <div class="card shadow">
+                            <div class="card-header" style="background-color: var(--sidebar-color); color: white;">
+                                <i class="fas fa-box"></i> Sản phẩm
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>150</h2>
+                                <p>Tổng sản phẩm</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow">
+                            <div class="card-header" style="background-color: var(--sidebar-color); color: white;">
+                                <i class="fas fa-users"></i> Người dùng
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>250</h2>
+                                <p>Người dùng đã đăng ký</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow">
+                            <div class="card-header" style="background-color: var(--sidebar-color); color: white;">
+                                <i class="fas fa-shopping-cart"></i> Đơn hàng
+                            </div>
+                            <div class="card-body text-center">
+                                <h2>120</h2>
+                                <p>Đơn hàng trong tháng</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+</div>
