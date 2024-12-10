@@ -13,7 +13,7 @@ module.exports = {
       const products = await productModel.all(currenPage, PER_PAGE);
       const numPages = Math.ceil(products.length / PER_PAGE);
       const totalPages = Array.from({ length: numPages }, (_, i) => i + 1);
-      res.render("productList", {
+      res.render("product/productList", {
         title: "Product List",
         user: req.session.user,
         products,
@@ -30,42 +30,14 @@ module.exports = {
     try {
       const id = req.params.id;
       const product = await productModel.one(id);
+      console.log(product);
 
-      const categoryNames = [];
-      for (const categoryId of product.category_id) {
-        const category = await categoryModel.one(categoryId);
-        if (category) {
-          categoryNames.push(category.name);
-        }
-      }
-      product.categoryNames = categoryNames;
-
-      const brand = await brandModel.one(product.brand_id);
-      product.brandNames = brand.name;
-
-      const reviews = await reviewModel.find({ product: product._id });
-      for (const review of reviews) {
-        const user = await userModel.one(review.user);
-        review.userName = user.name;
-      }
-
-      res.render("ProductDetails", {
+      res.render("product/productDetail", {
         user: req.session.user,
         product: product,
-        reviews: reviews,
       });
     } catch (error) {
-      next(new CError(500, "Error get product by ID", error.message));
-    }
-  },
-  addComment: (req, res, next) => {
-    try {
-      const { productId } = req.params;
-      const { rating, comment } = req.body;
-      // Logic thêm bình luận vào sản phẩm
-      res.json({ comment: { userName: "Current User", rating, comment } });
-    } catch (error) {
-      next(new CError(500, "Error add comment", error.message));
+      next(new CError(500, "Error get product details", error.message));
     }
   },
   // Thêm sản phẩm
@@ -73,7 +45,25 @@ module.exports = {
     try {
       const categories = await categoryModel.all();
       const brands = await brandModel.all();
-      res.render("addProduct", { brands, categories });
+      const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
+      const colors = [
+        "Đỏ",
+        "Xanh",
+        "Vàng",
+        "Trắng",
+        "Đen",
+        "Be",
+        "Hồng",
+        "Xám",
+        "Cam",
+        "Nâu",
+        "Tím",
+        "Xanh lá",
+        "Xanh ngọc",
+        "Kem",
+        "Vàng nghệ",
+      ];
+      res.render("product/addProduct", { brands, categories, sizes, colors });
     } catch (error) {
       next(
         new CError(500, "Error get all categories and brands", error.message)
@@ -86,7 +76,7 @@ module.exports = {
         name,
         price,
         brand_id,
-        category_id,
+        categories,
         stock,
         color,
         gender,
@@ -94,36 +84,23 @@ module.exports = {
         description,
       } = req.body;
       const image = req.files.map((file) => file.path);
-      console.log(image);
+      const category_id = categories.split(",");
 
-      // const rs = await productModel.add({
-      //   name,
-      //   price,
-      //   brand_id,
-      //   category_id,
-      //   stock,
-      //   color,
-      //   image,
-      //   gender,
-      //   size,
-      //   description,
-      // });
-      // res.json(rs);
+      const rs = await productModel.add({
+        name,
+        price,
+        brand_id,
+        category_id,
+        stock,
+        color,
+        image,
+        gender,
+        size,
+        description,
+      });
       res.redirect("/product");
     } catch (error) {
       next(new CError(500, "Error add product", error.message));
-    }
-  },
-  // Sửa sản phẩm
-  getEdit: async (req, res, next) => {
-    try {
-      const id = req.params.id;
-      const product = await productModel.one(id);
-      const categories = await categoryModel.all();
-      const brands = await brandModel.all();
-      res.render("admin/EditProduct", { product, categories, brands });
-    } catch (error) {
-      next(new CError(500, "Error get product by ID", error.message));
     }
   },
   postEdit: async (req, res, next) => {
@@ -163,7 +140,7 @@ module.exports = {
     try {
       const id = req.params.id;
       await productModel.delete(id);
-      res.redirect("/admin/product");
+      res.redirect("/product");
     } catch (error) {
       next(new CError(500, "Error delete product", error.message));
     }

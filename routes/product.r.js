@@ -2,17 +2,23 @@ const express = require("express");
 const productController = require("../controllers/product.c");
 const router = express.Router();
 const { uploadImage } = require("../middlewares/upload");
+const ensureAuthenticated = require("../middlewares/auth");
 
-router.get("/", productController.getAll);
-router.get("/id=:id", productController.getOne);
-router.get("/add", productController.getAdd);
-router.post("/add", uploadImage.array("images", 10), productController.postAdd);
-router.get("/edit/:id", productController.getEdit);
+router.get("/", ensureAuthenticated, productController.getAll);
+router.get("/id=:id", ensureAuthenticated, productController.getOne);
+router.get("/add", ensureAuthenticated, productController.getAdd);
+router.post(
+  "/add",
+  ensureAuthenticated,
+  uploadImage.array("images", 10),
+  productController.postAdd
+);
 router.post(
   "/edit/:id",
+  ensureAuthenticated,
   uploadImage.array("images", 10),
   productController.postEdit
 );
-router.get("/delete/:id", productController.delete);
+router.get("/delete/:id", ensureAuthenticated, productController.delete);
 
 module.exports = router;
