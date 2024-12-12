@@ -1,0 +1,68 @@
+<div class="container-fluid main-body">
+  <div class="row">
+    {{> navbar}}
+
+  <main class="col-md-12 content main-content">
+    <h2 class="text-center text-orange mb-4">
+      <i class="fa-brands fa-product-hunt"></i> Danh Sách Khuyến Mãi
+    </h2>
+
+    <div class="card shadow">
+      <div class="card-header">
+       <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Khuyến Mãi</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr class="text-center">
+              <th>STT</th>
+              <th>Code</th>
+              <th>Loại</th>
+              <th>Giá trị</th>
+              <th>Ngày hết hạn</th>
+              <th>SL Tối thiểu</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each discounts}}
+              <tr class="product-row" data-id="{{this._id}}">
+                <td class="text-center">{{inc @index}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.type}}</td>
+                <td>{{this.value}}</td>
+                <td>{{this.expiredAt}}</td>
+                <td>{{this.minAmount}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>           
+      </div>
+    </div>
+  </main>
+  </div>
+</div>
+
+<style>
+  .product-row {
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+  }
+
+  .product-row:hover {
+    background-color: #f8f9fa;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.querySelectorAll('.product-row');
+
+    rows.forEach(row => {
+      row.addEventListener('click', function() {
+        const id = row.getAttribute('data-id');
+        window.location.href = `/discount/id=${id}`;
+      });
+    });
+  });
+</script>
