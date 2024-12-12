@@ -39,10 +39,23 @@ module.exports = {
       console.error("Error:", e);
     }
   },
-  byUserId: async (userId) => {
+  getByUserId: async (userId) => {
     try {
       const accounts = await BankAccount.find({ id_user: userId }).lean();
       return accounts;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+
+  updateBalance: async (userId, newBalance) => {
+    try {
+      const updatedAccount = await BankAccount.findOneAndUpdate(
+        { id_user: userId },
+        { $set: { balance: newBalance } },
+        { new: true, lean: true }
+      );
+      return updatedAccount;
     } catch (e) {
       console.error("Error:", e);
     }
