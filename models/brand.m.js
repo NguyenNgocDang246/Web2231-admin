@@ -28,7 +28,7 @@ module.exports = {
         return brands;
       }
     } catch (e) {
-      console.error("Error:", e);
+      throw e;
     }
   },
   one: async (id) => {
@@ -36,7 +36,7 @@ module.exports = {
       const brand = await Brands.findById(id).lean();
       return brand;
     } catch (e) {
-      console.error("Error:", e);
+      throw e;
     }
   },
 };

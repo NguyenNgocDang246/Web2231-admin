@@ -99,6 +99,7 @@ module.exports = {
   },
   update: async (id, product) => {
     try {
+      console.log("product", product);
       const updatedProduct = await Product.findByIdAndUpdate(id, product, {
         new: true,
       });
