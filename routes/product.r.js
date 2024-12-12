@@ -14,7 +14,7 @@ router.post(
   productController.postAdd
 );
 router.post(
-  "/edit/:id",
+  "/update/:id",
   ensureAuthenticated,
   uploadImage.array("images", 10),
   productController.postEdit
