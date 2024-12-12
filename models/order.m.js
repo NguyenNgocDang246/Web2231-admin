@@ -41,7 +41,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["COD", "credit_card", "paypal"],
+      enum: ["COD", "online"],
       default: "COD",
     },
     paymentStatus: {
@@ -66,11 +66,23 @@ const orderSchema = new mongoose.Schema(
 const Orders = mongoose.model("order", orderSchema, "orders");
 
 module.exports = {
-  all: async (page = 1, orderPerPage = null) => {
+  all: async (
+    page = 1,
+    orderPerPage = null,
+    startDate = null,
+    endDate = null
+  ) => {
     try {
       const skip = (page - 1) * orderPerPage;
+
+      startDate = startDate ? new Date(startDate) : new Date(0);
+      endDate = endDate ? new Date(endDate) : new Date();
+
       if (orderPerPage) {
         const orders = await Orders.find()
+          .where("createdAt")
+          .gte(startDate)
+          .lte(endDate)
           .populate("user")
           .populate("discount")
           .skip(skip)
@@ -92,10 +104,31 @@ module.exports = {
   },
   one: async (id) => {
     try {
-      const order = await Orders.findById(id).lean();
+      const order = await Orders.findById(id)
+        .populate("user")
+        .populate("discount")
+        .populate("items.product")
+        .lean();
       return order;
     } catch (e) {
       throw e;
     }
   },
+  update: async (id, data) => {
+    try {
+      const order = await Orders.findByIdAndUpdate(id, data, {
+        new: true,
+      })
+        .populate("user")
+        .populate("discount")
+        .populate("items.product")
+        .lean();
+      return order;
+    } catch (e) {
+      throw e;
+    }
+  },
+  ORDER_STATUS: ["pending", "processing", "shipped", "delivered", "cancelled"],
+  PAYMENT_METHOD: ["COD", "online"],
+  PAYMENT_STATUS: ["pending", "paid", "failed"],
 };

@@ -1,0 +1,135 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container">
+                <h1 class="text-center mb-4 text-orange">Chi Tiết Đơn Hàng</h1>
+                <div class="card border-orange">
+                    <div class="card-body">
+                        <form action="/order/update/{{order._id}}" method="POST" enctype="multipart/form-data">
+                            
+                            {{!-- Tên khách hàng --}}
+                            <div class="mb-3">
+                                <label for="cusName" class="form-label">Tên khách hàng</label>
+                                <input id="cusNam" class="form-control" type="text" value="{{order.user.name}}" disabled>
+                            </div>
+
+                            {{!-- Danh sách sản phẩm --}}
+                            <div class="mb-3">
+                                <div class="card shadow my-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Sản Phẩm</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên Sản Phẩm</th>
+                                                <th>Giá</th>
+                                                <th>Số Lượng</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {{#each order.items}}
+                                            <tr>
+                                                <td>{{inc @index}}</td>
+                                                <td>{{this.product.name}}</td>
+                                                <td>{{this.product.price}} VND</td>
+                                                <td><input type="number" name="quantity" class="form-control" value="{{this.quantity}}"></td> 
+                                            </tr>
+                                            {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{!-- Tổng tiền --}}
+                            <div class="mb-3">
+                                <label for="total" class="form-label">Tổng Tiền</label>
+                                <input id="total" class="form-control" type="text" value="{{order.totalAmount}} VND" disabled>
+                            </div>
+
+                            {{!-- Giảm giá --}}
+                            <div class="mb-3">
+                                <label for="discount" class="form-label">Giảm Giá</label>
+                                <input id="discount" class="form-control" type="text" value="{{order.discount.value}}" disabled>
+                            </div>
+
+                            {{!-- Trạng thái --}}
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Trạng Thái</label>
+                                <select id="status" class="form-control" name="status" class="form-select">
+                                    {{#each orderStatus}}
+                                    <option value="{{this}}" {{#eq this order.status}}selected{{/eq}}>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            {{!-- Địa chỉ giao hàng --}}
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Địa Chỉ Giao Hàng</label>
+                                <input id="address" class="form-control" name="shippingAddress" type="text" value="{{order.shippingAddress}}">
+                            </div>
+
+                            {{!-- Người nhận --}}
+                            <div class="mb-3">
+                                <label for="receiver" class="form-label">Người Nhận</label>
+                                <input id="receiver" class="form-control" name="receiverName" type="text" value="{{order.receiverName}}">
+                            </div>
+
+                            {{!-- Phương thức thanh toán --}}
+                            <div class="mb-3">
+                                <label for="payment" class="form-label">Phương Thức Thanh Toán</label>
+                                <select id="payment" class="form-control" name="paymentMethod" class="form-select">
+                                    {{#each paymentMethod}}
+                                    <option value="{{this}}" {{#eq this order.paymentMethod}}selected{{/eq}}>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            {{!-- Trạng thái thanh toán --}}
+                            <div class="mb-3">
+                                <label for="paymentStatus" class="form-label">Trạng Thái Thanh Toán</label>
+                                <select id="paymentStatus" class="form-control" name="paymentStatus" class="form-select">
+                                    {{#each paymentStatus}}
+                                    <option value="{{this}}" {{#eq this order.paymentStatus}}selected{{/eq}}>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            {{!-- Nút xóa sản phẩm và nút cập nhật sản phẩm --}}
+                            <div class="d-flex justify-content-end">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                    Xóa
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Xóa Đơn Hàng</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa đơn hàng này không?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <a href="/order/delete/{{order._id}}" class="btn btn-danger text-white">Xóa</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

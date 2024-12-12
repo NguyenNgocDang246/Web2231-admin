@@ -3,65 +3,74 @@
     {{> navbar}}
 
   <main class="col-md-12 content main-content">
-    <h2 class="text-center mb-4 text-orange">Danh sách sản phẩm</h2>
+    <h2 class="text-center text-orange mb-4">
+      <i class="fa-brands fa-product-hunt"></i> Danh Sách Sản Phẩm
+    </h2>
 
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr class="text-center">
-          <th>STT</th>
-          <th>Tên sản phẩm</th>
-          <th>Giá</th>
-          <th>Màu sắc</th>
-          <th>Size</th>
-          <th>Số lượng</th>
-          <th>Thương hiệu</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each products}}
-          <tr class="product-row text-center" data-id="{{this._id}}">
-            <td>{{inc @index}}</td>
-            <td>{{this.name}}</td>
-            <td>{{this.price}}</td>
-            <td>{{#each this.colors}}{{this}} {{/each}}</td>
-            <td>{{#each this.size}}{{this}} {{/each}}</td>
-            <td>{{this.stock}}</td>
-            <td>{{this.brand_id.name}}</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-
-    <!-- Pagination -->
-    {{#if totalPages}}
-      <div class="d-flex justify-content-center">
-        <nav aria-label="Page navigation">
-          <ul class="pagination">
-            {{#if prevPage}}
-              <li class="page-item">
-                <a class="page-link" href="/products?page={{prevPage}}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-            {{/if}}
-
-            {{#each pages}}
-              <li class="page-item {{#ifCond this ../currentPage}}active{{/ifCond}}">
-                <a class="page-link" href="/products?page={{this}}">{{this}}</a>
-              </li>
-            {{/each}}
-
-            {{#if nextPage}}
-              <li class="page-item">
-                <a class="page-link" href="/products?page={{nextPage}}" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            {{/if}}
-          </ul>
-        </nav>
+    <div class="card shadow">
+      <div class="card-header">
+       <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Sản Phẩm</h5>
       </div>
-    {{/if}}
+      <div class="card-body">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr class="text-center">
+              <th>STT</th>
+              <th>Tên sản phẩm</th>
+              <th>Giá</th>
+              <th>Màu sắc</th>
+              <th>Size</th>
+              <th>Số lượng</th>
+              <th>Thương hiệu</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each products}}
+              <tr class="product-row text-center" data-id="{{this._id}}">
+                <td>{{inc @index}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.price}}</td>
+                <td>{{#each this.colors}}{{this}} {{/each}}</td>
+                <td>{{#each this.size}}{{this}} {{/each}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.brand_id.name}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>           
+      </div>
+
+      <!-- Pagination -->
+      {{#if totalPages}}
+        <div class="d-flex justify-content-center">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              {{#if prevPage}}
+                <li class="page-item">
+                  <a class="page-link" href="/products?page={{prevPage}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {{/if}}
+
+              {{#each pages}}
+                <li class="page-item {{#ifCond this ../currentPage}}active{{/ifCond}}">
+                  <a class="page-link" href="/products?page={{this}}">{{this}}</a>
+                </li>
+              {{/each}}
+
+              {{#if nextPage}}
+                <li class="page-item">
+                  <a class="page-link" href="/products?page={{nextPage}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              {{/if}}
+            </ul>
+          </nav>
+        </div>
+      {{/if}}
+    </div>
   </main>
   </div>
 </div>

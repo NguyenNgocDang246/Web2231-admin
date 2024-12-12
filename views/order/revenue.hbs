@@ -63,22 +63,29 @@
                     </div>
                 </div>
 
+                <h2 class="text-center text-orange" id="order-list">
+                    <i class="fas fa-chart-bar me-2"></i> Danh Sách Đơn Hàng
+                </h2>
                 <!-- Danh Sách Đơn Hàng -->
+                <form action="/revenue" method="post">
+                    <div class="row my-4 d-flex justify-content-end">
+                        {{!-- Ngày bắt đâu --}}
+                        <div class="col-md-3 d-flex justify-content-end">
+                            <label for="from" class="form-label me-2">Từ Ngày:</label>
+                            <input type="date" name="from" id="from" class="form-control">
+                        </div>
+                        {{!-- Ngày kết thúc --}}
+                        <div class="col-md-3 d-flex justify-content-end">
+                            <label for="to" class="form-label">Đến Ngày:</label>
+                            <input type="date" name="to" id="to" class="form-control">
+                        </div>
+                        {{!-- Button tìm kiếm --}}
+                        <button class="btn btn-success col-md-2">Tìm Kiếm</button>
+                    </div>
+                </form>
                 <div class="card shadow">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Đơn Hàng</h5>
-                        <div class="row my-4 d-flex justify-content-end">
-                            {{!-- Ngày bắt đâu --}}
-                            <div class="col-md-3 d-flex justify-content-end">
-                                <label for="from" class="form-label me-2 fw-bold text-orange">Từ Ngày:</label>
-                                <input type="date" name="from" id="from" class="form-control">
-                            </div>
-                            {{!-- Ngày kết thúc --}}
-                            <div class="col-md-3 d-flex justify-content-end">
-                                <label for="to" class="form-label me-2 fw-bold text-orange">Đến Ngày:</label>
-                                <input type="date" name="to" id="to" class="form-control">
-                            </div>
-                        </div>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
@@ -95,7 +102,7 @@
                             </thead>
                             <tbody>
                             {{#each orders}}
-                            <tr>
+                            <tr class="order-row" data-id="{{this._id}}">
                                 <td>{{inc @index}}</td>
                                 <td>{{this.user.name}}</td>
                                 <td>{{this.totalAmount}} VND</td>
@@ -190,4 +197,13 @@
         }
         }
     });
+
+    const orderRows = document.querySelectorAll('.order-row');
+
+    orderRows.forEach(row => {
+        row.addEventListener('click', function() {
+            const id = row.getAttribute('data-id');
+            window.location.href = `/order/id=${id}`;
+        });
+    }); 
 </script>
