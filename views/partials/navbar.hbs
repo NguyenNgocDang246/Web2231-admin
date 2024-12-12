@@ -1,27 +1,68 @@
 <button class="btn btn-primary show" id="admin-sidebar-toggle" type="button">
-    <i class="fas fa-bars"></i>
+  <i class="fas fa-bars"></i>
 </button>
 
 <aside class="col-md-3 sidebar bg-orange" id="adminSidebar">
-    <button class="btn btn-close text-white ms-auto" id="admin-sidebar-close" type="button">
-    </button>
-    <nav class="nav flex-column py-3">
-        <a class="nav-link" href="/revenue">
-            <i class="fas fa-chart-line me-2"></i><strong> Doanh Thu</strong>
-        </a>
-        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#statMenu" role="button" aria-expanded="false">
-            <i class="fa-brands fa-product-hunt me-2"></i><strong> Sản Phẩm</strong>
-        </a>
-        <div class="collapse" id="statMenu">
-            <a class="nav-link ps-4" href="/product">
-                <i class="fa-solid fa-list me-2"></i><strong> Danh Sách</strong>
-            </a>
-            <a class="nav-link ps-4" href="/product/add">
-                <i class="fa-solid fa-plus me-2"></i><strong> Thêm</strong>
-            </a>
-        </div>
-        <a class="nav-link" href="/category">
-            <i class="fa-solid fa-layer-group me-2"></i><strong> Danh Mục</strong>
-        </a>
-    </nav>
+  <button
+    class="btn btn-close text-white ms-auto"
+    id="admin-sidebar-close"
+    type="button"
+  >
+  </button>
+  <nav class="nav flex-column py-3">
+    <a class="nav-link" href="/order">
+      <i class="fas fa-chart-line me-2"></i><strong> Doanh Thu</strong>
+    </a>
+    <a
+      class="nav-link dropdown-toggle"
+      data-bs-toggle="collapse"
+      href="#statMenu"
+      role="button"
+      aria-expanded="false"
+    >
+      <i class="fa-brands fa-product-hunt me-2"></i><strong> Sản Phẩm</strong>
+    </a>
+    <div class="collapse" id="statMenu">
+      <a class="nav-link ps-4" href="/product">
+        <i class="fa-solid fa-list me-2"></i><strong> Danh Sách</strong>
+      </a>
+      <a class="nav-link ps-4" href="/product/add">
+        <i class="fa-solid fa-plus me-2"></i><strong> Thêm</strong>
+      </a>
+    </div>
+    <a
+      class="nav-link dropdown-toggle"
+      data-bs-toggle="collapse"
+      href="#cateMenu"
+      role="button"
+      aria-expanded="false"
+    >
+      <i class="fa-solid fa-bars me-2"></i><strong> Danh Mục</strong>
+    </a>
+    <div class="collapse" id="cateMenu">
+      <a class="nav-link ps-4" href="/category">
+        <i class="fa-solid fa-list me-2"></i><strong> Danh Sách</strong>
+      </a>
+      <a class="nav-link ps-4" href="/category/add">
+        <i class="fa-solid fa-plus me-2"></i><strong> Thêm</strong>
+      </a>
+    </div>
+    <a
+      class="nav-link dropdown-toggle"
+      data-bs-toggle="collapse"
+      href="#discountMenu"
+      role="button"
+      aria-expanded="false"
+    >
+      <i class="fa-solid fa-tag me-2"></i><strong> Khuyến Mãi</strong>
+    </a>
+    <div class="collapse" id="discountMenu">
+      <a class="nav-link ps-4" href="/discount">
+        <i class="fa-solid fa-list me-2"></i><strong> Danh Sách</strong>
+      </a>
+      <a class="nav-link ps-4" href="/discount/add">
+        <i class="fa-solid fa-plus me-2"></i><strong> Thêm</strong>
+      </a>
+    </div>
+  </nav>
 </aside>
