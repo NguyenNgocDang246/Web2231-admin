@@ -10,6 +10,7 @@
     "flash": "^1.1.0",
     "handlebars": "^4.7.8",
     "hbs": "^4.2.0",
+    "helmet": "^8.0.0",
     "mongoose": "^8.8.3",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
