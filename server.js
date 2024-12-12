@@ -49,6 +49,7 @@ const hbs = create({
     },
     inc: (value) => parseInt(value) + 1,
     json: (context) => JSON.stringify(context),
+    eq: (v1, v2) => v1 === v2,
   },
 });
 
@@ -59,7 +60,9 @@ app.set("views", "./views");
 app.use("/", require("./routes/home"));
 app.use("/product", require("./routes/product.r"));
 app.use("/auth", require("./routes/auth.r"));
-app.use("/revenue", require("./routes/revenue.r"));
+app.use("/order", require("./routes/order.r"));
+app.use("/category", require("./routes/category.r"));
+app.use("/discount", require("./routes/discount.r"));
 
 app.use((req, res, next) => {
   res.setHeader(
