@@ -10,17 +10,6 @@ const storageImage = new CloudinaryStorage({
   },
 });
 
-// const storageVideo = new CloudinaryStorage({
-//   cloudinary,
-//   params: {
-//     folder: "product-videos",
-//     allowed_formats: ["mp4", "avi", "flv", "wmv"],
-//     resource_type: "video",
-//     transformation: [{ width: 640, height: 480, crop: "limit" }],
-//   },
-// });
-
 const uploadImage = multer({ storage: storageImage });
-// const uploadVideo = multer({ storage: storageVideo });
 
 module.exports = { uploadImage };
