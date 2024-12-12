@@ -5,7 +5,6 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const flash = require("express-flash");
-const bcrypt = require("bcrypt");
 const path = require("path");
 
 const initializePassport = require("./configs/passport");
@@ -49,6 +48,7 @@ const hbs = create({
       return null;
     },
     inc: (value) => parseInt(value) + 1,
+    json: (context) => JSON.stringify(context),
   },
 });
 
@@ -59,6 +59,7 @@ app.set("views", "./views");
 app.use("/", require("./routes/home"));
 app.use("/product", require("./routes/product.r"));
 app.use("/auth", require("./routes/auth.r"));
+app.use("/revenue", require("./routes/revenue.r"));
 
 app.use((req, res, next) => {
   res.setHeader(
@@ -85,7 +86,6 @@ app.use((err, req, res, next) => {
 });
 
 const { connectDB } = require("./configs/db/db");
-const { title } = require("process");
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
