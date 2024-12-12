@@ -9,17 +9,17 @@ const PER_PAGE = 10;
 module.exports = {
   getAll: async (req, res, next) => {
     try {
-      const currenPage = req.query.page || 1;
-      const products = await productModel.all(currenPage, PER_PAGE);
+      const currentPage = req.query.page || 1;
+      const products = await productModel.all(currentPage, PER_PAGE);
       const numPages = Math.ceil(products.length / PER_PAGE);
       const totalPages = Array.from({ length: numPages }, (_, i) => i + 1);
       res.render("product/productList", {
         title: "Product List",
         user: req.session.user,
         products,
-        currenPage,
-        prevPage: currenPage > 1 ? currenPage - 1 : null,
-        nextPage: currenPage < totalPages ? currenPage + 1 : null,
+        currentPage,
+        prevPage: currentPage > 1 ? currentPage - 1 : null,
+        nextPage: currentPage < totalPages ? currentPage + 1 : null,
         totalPages,
       });
     } catch (error) {
@@ -30,11 +30,36 @@ module.exports = {
     try {
       const id = req.params.id;
       const product = await productModel.one(id);
-      console.log(product);
+      const categories = await categoryModel.all();
+      const brands = await brandModel.all();
+      const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
+      const colors = [
+        "Đỏ",
+        "Xanh",
+        "Vàng",
+        "Trắng",
+        "Đen",
+        "Be",
+        "Hồng",
+        "Xám",
+        "Cam",
+        "Nâu",
+        "Tím",
+        "Xanh lá",
+        "Xanh ngọc",
+        "Kem",
+        "Vàng nghệ",
+      ];
+      const genders = ["Nam", "Nữ", "Unisex"];
 
       res.render("product/productDetail", {
         user: req.session.user,
         product: product,
+        categories,
+        brands,
+        sizes,
+        colors,
+        genders,
       });
     } catch (error) {
       next(new CError(500, "Error get product details", error.message));
@@ -63,7 +88,14 @@ module.exports = {
         "Kem",
         "Vàng nghệ",
       ];
-      res.render("product/addProduct", { brands, categories, sizes, colors });
+      const genders = ["Nam", "Nữ", "Unisex"];
+      res.render("product/addProduct", {
+        brands,
+        categories,
+        sizes,
+        colors,
+        genders,
+      });
     } catch (error) {
       next(
         new CError(500, "Error get all categories and brands", error.message)
@@ -78,13 +110,15 @@ module.exports = {
         brand_id,
         categories,
         stock,
-        color,
+        colors,
         gender,
-        size,
+        sizes,
         description,
       } = req.body;
       const image = req.files.map((file) => file.path);
       const category_id = categories.split(",");
+      const size = sizes.split(",");
+      const color = colors.split(",");
 
       const rs = await productModel.add({
         name,
@@ -105,23 +139,30 @@ module.exports = {
   },
   postEdit: async (req, res, next) => {
     try {
-      const id = req.params.id;
       const {
         name,
         price,
-        brand_id,
-        category_id,
+        brand,
+        categories,
         stock,
-        color,
-        image,
+        colors,
         gender,
-        size,
+        sizes,
         description,
       } = req.body;
-      await productModel.update(id, {
+      const newImages = req.files.map((file) => file.path);
+      const oldImages = req.body.oldImages.split(",");
+      const image = [...oldImages, ...newImages];
+      const category_id = categories.split(",");
+      const size = sizes.split(",");
+      const color = colors.split(",");
+
+      const id = req.params.id;
+
+      const rs = await productModel.update(id, {
         name,
         price,
-        brand_id,
+        brand_id: brand,
         category_id,
         stock,
         color,
