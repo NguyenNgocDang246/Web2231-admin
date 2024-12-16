@@ -1,0 +1,172 @@
+<div class="container-fluid main-body">
+  <div class="row">
+    {{> navbar}}
+
+  <main class="col-md-12 content main-content">
+    <h2 class="text-center text-orange mb-4">
+      <i class="fa-brands fa-product-hunt"></i> Danh Sách Sản Phẩm
+    </h2>
+
+    <div class="card shadow">
+      <div class="card-header">
+       <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Sản Phẩm</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr class="text-center">
+              <th>STT</th>
+              <th>Tên sản phẩm</th>
+              <th>Giá</th>
+              <th>Màu sắc</th>
+              <th>Size</th>
+              <th>Số lượng</th>
+              <th>Thương hiệu</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each products}}
+              <tr class="product-row text-center" data-id="{{this._id}}">
+                <td>{{inc @index}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.price}}</td>
+                <td>{{#each this.colors}}{{this}} {{/each}}</td>
+                <td>{{#each this.size}}{{this}} {{/each}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.brand_id.name}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>           
+      </div>
+      
+      <div class="d-flex justify-content-center">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <!-- Prev Page -->
+              <li class="page-item p-page {{#if prevPage}}enabled{{else}}disabled{{/if}}">
+                <div class="page-link" {{#if prevPage}}data-page="{{prevPage}}"{{/if}}>
+                  <span aria-hidden="true">&laquo;</span>
+                </div>
+              </li>
+
+              <!-- Page Numbers -->
+              {{#each pages}}
+                <li class="page-item">
+                  <div class="page-link" data-page="{{this}}">{{this}}</div>
+                </li>
+              {{/each}}
+
+              <!-- Next Page -->
+              <li class="page-item n-page {{#if nextPage}}enabled{{else}}disabled{{/if}}">
+                <div class="page-link" {{#if nextPage}}data-page="{{nextPage}}"{{/if}}>
+                  <span aria-hidden="true">&raquo;</span>
+                </div>
+              </li>
+            </ul>
+          </nav>
+        </div>
+    </div>
+  </main>
+  </div>
+</div>
+
+<style>
+  .product-row {
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+  }
+
+  .product-row:hover {
+    background-color: #f8f9fa;
+  }
+
+  .edit-btn, .delete-btn {
+    margin-right: 10px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {  
+
+    const changeActive = () => {
+      const pageLinks = document.querySelectorAll('.page-link');
+
+      pageLinks.forEach(link => {
+        link.parentElement.classList.remove('active');
+
+        if (link.getAttribute('data-page') === currentPage.toString() && !link.parentElement.classList.contains('n-page') && !link.parentElement.classList.contains('p-page')) {
+          link.parentElement.classList.add('active');
+        }
+
+        if (currentPage === 1 && link.parentElement.classList.contains('p-page')) {
+          link.parentElement.classList.remove('enabled');
+          link.parentElement.classList.add('disabled');
+        }
+
+        if (currentPage === totalPages && link.parentElement.classList.contains('n-page')) {
+          link.parentElement.classList.remove('enabled');
+          link.parentElement.classList.add('disabled');
+        }
+
+        if (currentPage !== 1 && link.parentElement.classList.contains('p-page')) {
+          link.parentElement.classList.remove('disabled');
+          link.parentElement.classList.add('enabled');
+        }
+
+        if (currentPage !== totalPages && link.parentElement.classList.contains('n-page')) {
+          link.parentElement.classList.remove('disabled');
+          link.parentElement.classList.add('enabled');
+        }
+      });
+    };
+
+    let currentPage = JSON.parse(JSON.stringify({{currentPage}}));
+    let totalPages = JSON.parse(JSON.stringify({{totalPages}}));
+
+    changeActive();
+
+    const rows = document.querySelectorAll('.product-row');
+
+    rows.forEach(row => {
+      row.addEventListener('click', function() {
+        const id = row.getAttribute('data-id');
+        window.location.href = `/product/id=${id}`;
+      });
+    });
+
+    const pageLinks = document.querySelectorAll('.page-link');
+
+    pageLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        const page = link.getAttribute('data-page');
+        currentPage = parseInt(page);
+        
+        document.querySelector('.p-page').children[0].setAttribute('data-page', currentPage - 1);
+        document.querySelector('.n-page').children[0].setAttribute('data-page', currentPage + 1);
+
+        changeActive();
+        fetch(`/product/list?page=${page}`)
+          .then(res => res.json())
+          .then(data => {
+            let html = '';
+            data.forEach(product => {
+              html += `
+                <tr class="product-row text-center" data-id="${product._id}">
+                  <td>${product.name}</td>
+                  <td>${product.price}</td>
+                  <td>${product.colors.join(', ')}</td>
+                  <td>${product.size.join(', ')}</td>
+                  <td>${product.stock}</td>
+                  <td>${product.brand_id.name}</td>
+                </tr>
+              `;
+            });
+
+            document.querySelector('tbody').innerHTML = html;
+          });
+      });
+    });
+  });
+</script>
