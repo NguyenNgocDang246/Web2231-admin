@@ -50,11 +50,15 @@ module.exports = {
       if (reviewPerPage) {
         const reviews = await Reviews.find(condition)
           .skip(skip)
+          .populate("user")
           .limit(reviewPerPage)
           .lean();
         return reviews;
       } else {
-        const reviews = await Reviews.find(condition).skip(skip).lean();
+        const reviews = await Reviews.find(condition)
+          .skip(skip)
+          .populate("user")
+          .lean();
         return reviews;
       }
     } catch (e) {
