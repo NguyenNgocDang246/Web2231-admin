@@ -39,4 +39,25 @@ module.exports = {
       throw e;
     }
   },
+  add: async (brand) => {
+    try {
+      await Brands.create(brand);
+    } catch (e) {
+      throw e;
+    }
+  },
+  update: async (id, brand) => {
+    try {
+      await Brands.findByIdAndUpdate(id, brand);
+    } catch (e) {
+      throw e;
+    }
+  },
+  delete: async (id) => {
+    try {
+      await Brands.findByIdAndDelete(id);
+    } catch (e) {
+      throw e;
+    }
+  },
 };
