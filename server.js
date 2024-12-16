@@ -40,7 +40,6 @@ const hbs = create({
   partialsDir: "./views/partials",
   defaultLayout: "main",
   helpers: {
-    eq: (a, b) => a === b,
     index: (array, index) => {
       if (Array.isArray(array) && array.length > 0) {
         return array[index];
@@ -50,6 +49,15 @@ const hbs = create({
     inc: (value) => parseInt(value) + 1,
     json: (context) => JSON.stringify(context),
     eq: (v1, v2) => v1 === v2,
+    dateFormat: (date) => {
+      return new Date(date).toLocaleString();
+    },
+    neq: (v1, v2, options) => {
+      if (Number(v1) !== Number(v2)) {
+        return options.fn(this);
+      }
+      return options.inverse(this);
+    },
   },
 });
 
@@ -63,6 +71,7 @@ app.use("/auth", require("./routes/auth.r"));
 app.use("/order", require("./routes/order.r"));
 app.use("/category", require("./routes/category.r"));
 app.use("/discount", require("./routes/discount.r"));
+app.use("/brand", require("./routes/brand.r"));
 
 app.use((req, res, next) => {
   res.setHeader(
