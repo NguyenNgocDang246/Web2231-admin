@@ -168,4 +168,14 @@ module.exports = {
       next(new CError(500, "Error delete product", error.message));
     }
   },
+  // Xóa review
+  removeReview: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await reviewModel.delete(id);
+      res.json({ message: "Review deleted" });
+    } catch (error) {
+      next(new CError(500, "Error delete review", error.message));
+    }
+  },
 };
