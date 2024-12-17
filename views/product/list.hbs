@@ -151,9 +151,10 @@
           .then(res => res.json())
           .then(data => {
             let html = '';
-            data.forEach(product => {
+            data.forEach((product, index) => {
               html += `
                 <tr class="product-row text-center" data-id="${product._id}">
+                  <td>${index + 1}</td>
                   <td>${product.name}</td>
                   <td>${product.price}</td>
                   <td>${product.colors.join(', ')}</td>
