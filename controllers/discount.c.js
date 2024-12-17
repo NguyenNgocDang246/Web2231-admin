@@ -5,12 +5,32 @@ const PER_PAGE = 10;
 module.exports = {
   index: async (req, res, next) => {
     try {
-      const discounts = await discountModel.all();
+      const currentPage = req.query.page || 1;
+      const totalDiscounts = await discountModel.count();
+      const discounts = await discountModel.all(currentPage, PER_PAGE);
+      const totalPages = Math.ceil(totalDiscounts / PER_PAGE);
+      const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
       res.render("discount/index", {
         discounts,
         user: req.session.user,
         title: "Khuyến mãi",
+        currentPage,
+        pages,
+        prevPage: currentPage > 1 ? currentPage - 1 : null,
+        nextPage: currentPage < totalPages ? currentPage + 1 : null,
+        totalPages,
       });
+    } catch (err) {
+      next(new CError(500, "Error getting all discounts", err.message));
+    }
+  },
+  list: async (req, res, next) => {
+    try {
+      const currentPage = req.query.page || 1;
+      const discounts = await discountModel.all(currentPage, PER_PAGE);
+
+      res.json(discounts);
     } catch (err) {
       next(new CError(500, "Error getting all discounts", err.message));
     }

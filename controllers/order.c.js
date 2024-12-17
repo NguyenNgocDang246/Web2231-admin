@@ -6,11 +6,11 @@ const PER_PAGE = 10;
 module.exports = {
   index: async (req, res, next) => {
     try {
-      const { from, to } = req.body;
-      const currentPage = req.query.page || 1;
-      const orders = await orderModel.all(currentPage, PER_PAGE, from, to);
-      const numPages = Math.ceil(orders.length / PER_PAGE);
-      const totalPages = Array.from({ length: numPages }, (_, i) => i + 1);
+      const currentPage = 1;
+      const totalOrders = await orderModel.count();
+      const orders = await orderModel.all(currentPage, PER_PAGE);
+      const totalPages = Math.ceil(totalOrders / PER_PAGE);
+      const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
       try {
         orders.forEach((order) => {
@@ -34,10 +34,39 @@ module.exports = {
         user: req.session.user,
         orders,
         currentPage,
+        pages,
         prevPage: currentPage > 1 ? currentPage - 1 : null,
         nextPage: currentPage < totalPages ? currentPage + 1 : null,
         totalPages,
       });
+    } catch (error) {
+      next(new CError(500, "Error get all orders", error.message));
+    }
+  },
+  list: async (req, res, next) => {
+    try {
+      const { from, to } = req.body;
+      const currentPage = req.query.page || 1;
+      const orders = await orderModel.all(currentPage, PER_PAGE, from, to);
+
+      try {
+        orders.forEach((order) => {
+          if (order.discount) {
+            const discount = order.discount;
+            order.discount.value =
+              discount.type === "percent"
+                ? discount.value * 0.01 * order.totalAmount
+                : discount.value;
+          } else {
+            order.discount = { value: 0 };
+          }
+        });
+      } catch (error) {
+        console.log("Error get discount", error.message);
+        next(new CError(500, "Error get discount", error.message));
+      }
+
+      res.json(orders);
     } catch (error) {
       next(new CError(500, "Error get all orders", error.message));
     }
