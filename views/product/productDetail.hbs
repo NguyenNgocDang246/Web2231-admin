@@ -187,7 +187,7 @@
                                         </div>
 
                                         {{#each reviews}}
-                                            <div class="card mb-3">
+                                            <div class="card mb-3 review-card" data-id="{{this._id}}">
                                                 <div class="card-body">
                                                     <div class="d-flex flex-start">
                                                     {{#if this.user.image}}
@@ -207,7 +207,7 @@
                                                         </div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                         <p class="small mb-0" style="color: #aaa;">
-                                                            <a href="#!" class="link-grey">Remove</a>
+                                                            <a style="cursor: pointer;" id="delete-review" class="link-grey" data-id="{{this._id}}">Remove</a>
                                                             {{!-- <a href="#!" class="link-grey">Reply</a> •
                                                             <a href="#!" class="link-grey">Translate</a> --}}
                                                         </p>
@@ -501,4 +501,22 @@
 
     // Set hidden input value for images
     document.getElementById('hid-img').value = selectedImages.join(',');
+
+    // Xóa review
+    document.getElementById('delete-review').addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        fetch(`/product/reviews/remove/${id}`, {
+            method: 'GET',
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    const reviewCard = document.querySelectorAll(".review-card");
+                    reviewCard.forEach(review => {
+                        if (review.getAttribute("data-id") === id) review.style.display = 'none';
+                    })
+                }
+            });
+
+    });
 </script>
