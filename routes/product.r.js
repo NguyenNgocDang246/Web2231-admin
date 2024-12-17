@@ -21,5 +21,10 @@ router.post(
   productController.edit
 );
 router.get("/delete/:id", ensureAuthenticated, productController.delete);
+router.get(
+  "/reviews/remove/:id",
+  ensureAuthenticated,
+  productController.removeReview
+);
 
 module.exports = router;
