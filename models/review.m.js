@@ -65,4 +65,20 @@ module.exports = {
       console.error("Error:", e);
     }
   },
+  count: async () => {
+    try {
+      const totalReviews = await Reviews.countDocuments();
+      return totalReviews;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+  delete: async (id) => {
+    try {
+      const review = await Reviews.findByIdAndDelete(id);
+      return review;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
 };

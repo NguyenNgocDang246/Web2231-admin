@@ -46,6 +46,13 @@ module.exports = {
       throw error;
     }
   },
+  count: async () => {
+    try {
+      return Discount.countDocuments();
+    } catch (error) {
+      throw error;
+    }
+  },
   add: async (discount) => {
     try {
       await Discount.create(discount);

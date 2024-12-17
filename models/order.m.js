@@ -102,6 +102,15 @@ module.exports = {
       throw e;
     }
   },
+  count: async () => {
+    try {
+      const totalOrders = await Orders.countDocuments();
+      return totalOrders;
+    } catch (e) {
+      console.error("Error in OrderModel.count:", e);
+      throw e;
+    }
+  },
   one: async (id) => {
     try {
       const order = await Orders.findById(id)
