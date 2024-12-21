@@ -48,6 +48,8 @@ module.exports = {
       const { from, to } = req.body;
       const currentPage = req.query.page || 1;
       const orders = await orderModel.all(currentPage, PER_PAGE, from, to);
+      const totalOrders = await orderModel.countByDate(from, to);
+      const totalPages = Math.ceil(totalOrders / PER_PAGE);
 
       try {
         orders.forEach((order) => {
@@ -66,7 +68,7 @@ module.exports = {
         next(new CError(500, "Error get discount", error.message));
       }
 
-      res.json(orders);
+      res.json({orders, totalPages});
     } catch (error) {
       next(new CError(500, "Error get all orders", error.message));
     }

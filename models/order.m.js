@@ -111,6 +111,22 @@ module.exports = {
       throw e;
     }
   },
+  countByDate: async (startDate, endDate) => {
+    try {
+      startDate = startDate ? new Date(startDate) : new Date(0);
+      endDate = endDate ? new Date(endDate) : new Date();
+      const totalOrders = await Orders.countDocuments({
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+      });
+      return totalOrders;
+    } catch (e) {
+      console.error("Error in OrderModel.countByDate:", e);
+      throw e;
+    }
+  },
   one: async (id) => {
     try {
       const order = await Orders.findById(id)

@@ -170,6 +170,9 @@
     </div>
 </div>
 
+<script src="/js/toast.js"></script>
+
+{{!-- Graph --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('revenueChart').getContext('2d');
@@ -202,93 +205,64 @@
         });
     });
 </script>
+
+{{!-- Pagination --}}
+<script src="/js/pagination.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {  
-
-    const changeActive = () => {
-      const pageLinks = document.querySelectorAll('.page-link');
-
-      pageLinks.forEach(link => {
-        link.parentElement.classList.remove('active');
-
-        if (link.getAttribute('data-page') === currentPage.toString() && !link.parentElement.classList.contains('n-page') && !link.parentElement.classList.contains('p-page')) {
-          link.parentElement.classList.add('active');
-        }
-
-        if (currentPage === 1 && link.parentElement.classList.contains('p-page')) {
-          link.parentElement.classList.remove('enabled');
-          link.parentElement.classList.add('disabled');
-        }
-
-        if (currentPage === totalPages && link.parentElement.classList.contains('n-page')) {
-          link.parentElement.classList.remove('enabled');
-          link.parentElement.classList.add('disabled');
-        }
-
-        if (currentPage !== 1 && link.parentElement.classList.contains('p-page')) {
-          link.parentElement.classList.remove('disabled');
-          link.parentElement.classList.add('enabled');
-        }
-
-        if (currentPage !== totalPages && link.parentElement.classList.contains('n-page')) {
-          link.parentElement.classList.remove('disabled');
-          link.parentElement.classList.add('enabled');
-        }
-      });
-    };
-
     let currentPage = JSON.parse(JSON.stringify({{currentPage}}));
     let totalPages = JSON.parse(JSON.stringify({{totalPages}}));
 
+    const addLink = () => {
+        const pageLinks = document.querySelectorAll('.page-link');
+        pageLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const page = link.getAttribute('data-page');
+            currentPage = parseInt(page);
+            
+            document.querySelector('.p-page').children[0].setAttribute('data-page', currentPage - 1);
+            document.querySelector('.n-page').children[0].setAttribute('data-page', currentPage + 1);
+
+            changeActive();
+            fetch(`/order/list?page=${page}`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ from: document.querySelector('#from').value, to: document.querySelector('#to').value}),
+            })
+            .then(res => res.json())
+            .then(data => {
+                let html = '';
+                data.orders.forEach((order, index) => {
+                html += `
+                    <tr class="order-row" data-id="${order._id}">
+                    <td>${index + 1}</td>
+                    <td>${order.user.name}</td>
+                    <td>${order.totalAmount} VND</td>
+                    <td>${order.discount.value} VND</td>
+                    <td>
+                        ${order.status === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.status === 'pending' ? '<span class="badge bg-warning">Đang Xử Lý</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                    </td>
+                    <td>
+                        ${order.paymentMethod === 'cod' ? '<span class="badge bg-primary">COD</span>' : '<span class="badge bg-info">Chuyển khoản</span>'}
+                    </td>
+                    <td>
+                        ${order.paymentStatus === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.paymentStatus === 'pending' ? '<span class="badge bg-warning">Chưa Thanh Toán</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                    </td>
+                    </tr>
+                `;
+                });
+
+                document.querySelector('tbody').innerHTML = html;
+            })
+            })
+        });
+    }
+
     changeActive();
-    const pageLinks = document.querySelectorAll('.page-link');
+    addLink();
 
-    pageLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        const page = link.getAttribute('data-page');
-        currentPage = parseInt(page);
-        
-        document.querySelector('.p-page').children[0].setAttribute('data-page', currentPage - 1);
-        document.querySelector('.n-page').children[0].setAttribute('data-page', currentPage + 1);
-
-        changeActive();
-        fetch(`/order/list?page=${page}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ from: document.querySelector('#from').value, to: document.querySelector('#to').value}),
-        })
-          .then(res => res.json())
-          .then(data => {
-            let html = '';
-            data.forEach((order, index) => {
-              html += `
-                <tr class="order-row" data-id="${order._id}">
-                  <td>${index + 1}</td>
-                  <td>${order.user.name}</td>
-                  <td>${order.totalAmount} VND</td>
-                  <td>${order.discount.value} VND</td>
-                  <td>
-                    ${order.status === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.status === 'pending' ? '<span class="badge bg-warning">Đang Xử Lý</span>' : '<span class="badge bg-danger">Không thành công</span>'}
-                  </td>
-                  <td>
-                    ${order.paymentMethod === 'cod' ? '<span class="badge bg-primary">COD</span>' : '<span class="badge bg-info">Chuyển khoản</span>'}
-                  </td>
-                  <td>
-                    ${order.paymentStatus === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.paymentStatus === 'pending' ? '<span class="badge bg-warning">Chưa Thanh Toán</span>' : '<span class="badge bg-danger">Không thành công</span>'}
-                  </td>
-                </tr>
-              `;
-            });
-
-            document.querySelector('tbody').innerHTML = html;
-          })
-      })
-    });
-  });
-
-  // Search Order
+    // Search Order
     document.querySelector('#order-form').addEventListener('submit', function(e) {
         e.preventDefault();
         fetch(`/order/list?page=1`, {
@@ -301,8 +275,8 @@
         .then(res => res.json())
         .then(data => {
             let html = '';
-            data.forEach((order, index) => {
-            html += `
+            data.orders.forEach((order, index) => {
+                html += `
                 <tr class="order-row" data-id="${order._id}">
                 <td>${index + 1}</td>
                 <td>${order.user.name}</td>
@@ -322,6 +296,44 @@
             });
     
             document.querySelector('tbody').innerHTML = html;
-        })
+
+            currentPage = 1;
+            totalPages = data.totalPages;
+
+            const pagination = document.querySelector('.pagination');
+            pagination.innerHTML = '';
+
+            if (data.totalPages > 1) {
+                pagination.innerHTML += `
+                <li class="page-item p-page disabled">
+                    <div class="page-link" data-page="1">
+                    <span aria-hidden="true">&laquo;</span>
+                    </div>
+                </li>
+                `;
+
+                for (let i = 1; i <= data.totalPages; i++) {
+                pagination.innerHTML += `
+                    <li class="page-item">
+                    <div class="page-link" data-page="${i}">${i}</div>
+                    </li>
+                `;
+                }
+
+                pagination.innerHTML += `
+                <li class="page-item n-page">
+                    <div class="page-link" data-page="2">
+                    <span aria-hidden="true">&raquo;</span>
+                    </div>
+                </li>
+                `;
+            }
+            changeActive();
+
+            const pageLinks = document.querySelectorAll('.page-link');
+            addLink();
+            toastr.success('Tìm kiếm thành công');
+
+        });
     });
 </script>
