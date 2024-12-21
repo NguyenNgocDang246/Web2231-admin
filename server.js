@@ -4,8 +4,9 @@ const { create } = require("express-handlebars");
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
-const flash = require("express-flash");
+const flash = require("connect-flash");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 const initializePassport = require("./configs/passport");
 initializePassport(passport);
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -32,6 +34,23 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Middleware for 404
+app.use((err, req, res, next) => {
+  if (app.get("env") === "development") {
+    res.status(err.status || 500).render("error", {
+      title: "Lỗi",
+      message: err.message,
+      error: err,
+    });
+  } else {
+    res.status(err.status || 500).render("error", {
+      title: "Lỗi",
+      message: "Đã xảy ra lỗi, vui lòng thử lại sau!",
+      error: {},
+    });
+  }
+});
 
 const hbs = create({
   extname: ".hbs",
@@ -65,6 +84,7 @@ app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", "./views");
 
+// Routes
 app.use("/", require("./routes/home"));
 app.use("/product", require("./routes/product.r"));
 app.use("/auth", require("./routes/auth.r"));
@@ -79,22 +99,6 @@ app.use((req, res, next) => {
     "img-src 'self' data:; default-src 'self';"
   );
   next();
-});
-
-app.use((err, req, res, next) => {
-  if (app.get("env") === "development") {
-    res.status(err.status || 500).render("error", {
-      title: "Lỗi",
-      message: err.message,
-      error: err,
-    });
-  } else {
-    res.status(err.status || 500).render("error", {
-      title: "Lỗi",
-      message: "Đã xảy ra lỗi, vui lòng thử lại sau!",
-      error: {},
-    });
-  }
 });
 
 const { connectDB } = require("./configs/db/db");
