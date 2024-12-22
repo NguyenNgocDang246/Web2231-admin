@@ -1,0 +1,428 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container">
+                <h1 class="text-center mb-4 text-orange">Thêm sản phẩm</h1>
+                <div class="card border-orange">
+                    <div class="card-body">
+                        <form action="/product/add" method="POST" enctype="multipart/form-data">
+                            <!-- Tên sản phẩm -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên sản phẩm</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên sản phẩm" required>
+                            </div>
+
+                            <!-- Thương hiệu -->
+                            <div class="mb-3">
+                                <label for="brand" class="form-label">Thương hiệu</label>
+                                <input type="text" class="form-control" id="brand" name="brand" hidden required>
+                                <input type="text" class="form-control" id="brand-name" placeholder="-- Chọn thương hiệu --" readonly required>
+                                <div id="brand-dropdown" class="dropdown-menu w-100" style="display: none;">
+                                    {{#each brands}}
+                                        <button type="button" class="dropdown-item" onclick="selectBrand('{{this._id}}', '{{this.name}}')">{{this.name}}</button>
+                                    {{/each}}
+                                </div>
+                            </div>
+
+                            {{!-- Giới tính --}}
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Giới tính</label>
+                                <input type="text" class="form-control" id="gender" name="gender" hidden required>
+                                <input type="text" class="form-control" id="gender-name" placeholder="-- Chọn giới tính --" readonly required>
+                                <div id="gender-dropdown" class="dropdown-menu w-100" style="display: none;">
+                                    {{#each genders}}
+                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this.name}}')">{{this.name}}</button>
+                                    {{/each}}
+                                </div>
+                            </div>
+
+                            <!-- Danh mục -->
+                            <div class="mb-3 position-relative">
+                                <label for="category" class="form-label">Danh mục</label>
+                                <input type="text" class="form-control" id="category" name="categories" value="" hidden required>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="category-name" 
+                                    placeholder="-- Chọn danh mục --" 
+                                    readonly 
+                                    onclick="toggleDropdown()"
+                                >
+                                <div id="category-dropdown" class="dropdown-menu w-100" style="display: none;">
+                                    {{#each categories}}
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item" 
+                                            onclick="selectCategory('{{this._id}}', '{{this.name}}')">
+                                            {{this.name}}
+                                        </button>
+                                    {{/each}}
+                                </div>
+                                <div id="selected-categories" class="mt-2">
+                                    <!-- Danh mục được chọn sẽ hiển thị ở đây -->
+                                </div>
+                            </div>
+
+                            <!-- Size -->
+                            <div class="mb-3 position-relative">
+                                <label for="size" class="form-label">Size</label>
+                                <input type="text" class="form-control" id="size" name="sizes" value="" hidden required>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="size-name" 
+                                    placeholder="-- Chọn size --" 
+                                    readonly 
+                                    onclick="toggleDropdown()"
+                                >
+                                <div id="size-dropdown" class="dropdown-menu w-100" style="display: none;">
+                                    {{#each sizes}}
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item" 
+                                            onclick="selectSize('{{this}}')">
+                                            {{this}}
+                                        </button>
+                                    {{/each}}
+                                </div>
+                                <div id="selected-sizes" class="mt-2">
+                                </div>
+                            </div>
+
+                            <!-- Color -->
+                            <div class="mb-3 position-relative">
+                                <label for="color" class="form-label">Màu sắc</label>
+                                <input type="text" class="form-control" id="color" name="colors" value="" hidden required>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="color-name" 
+                                    placeholder="-- Chọn màu sắc --" 
+                                    readonly 
+                                    onclick="toggleDropdown()"
+                                >
+                                <div id="color-dropdown" class="dropdown-menu w-100" style="display: none;">
+                                    {{#each colors}}
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item" 
+                                            onclick="selectColor('{{this}}')">
+                                            {{this}}
+                                        </button>
+                                    {{/each}}
+                                </div>
+                                <div id="selected-colors" class="mt-2">
+                                </div>
+                            </div>
+
+                            <!-- Giá và giảm giá -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="price" class="form-label">Giá sản phẩm (VND)</label>
+                                    <input type="number" class="form-control" id="price" name="price" placeholder="Nhập giá sản phẩm" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="discount" class="form-label">Giảm giá (%)</label>
+                                    <input type="number" class="form-control" id="discount" name="discount" placeholder="Nhập giảm giá">
+                                </div>
+                            </div>
+
+                            <!-- Số lượng -->
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Số lượng trong kho</label>
+                                <input type="number" class="form-control" id="stock" name="stock" placeholder="Nhập số lượng sản phẩm" required>
+                            </div>
+
+                            <!-- Mô tả -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Mô tả sản phẩm</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Hình ảnh</label>
+                                <div id="image-preview" class="d-flex flex-wrap gap-3">
+                                    <!-- Hình ảnh được chọn sẽ hiển thị tại đây -->
+                                </div>
+                                <!-- Label giả làm nút chọn hình ảnh -->
+                                <label for="images" class="btn btn-outline-primary d-flex justify-content-center align-items-center gap-2 mt-2">
+                                    <i class="fas fa-image fa-2x"></i>
+                                    <span>Chọn ảnh</span>
+                                </label>
+                                <input 
+                                    type="file" 
+                                    id="images" 
+                                    name="images" 
+                                    accept="image/*" 
+                                    class="d-none" 
+                                    multiple
+                                >
+                            </div>
+
+                            <!-- Nút thêm -->
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-plus-circle"></i> Thêm sản phẩm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Hiển thị dropdown danh mục
+    document.getElementById('category-name').addEventListener('click', function () {
+        const dropdown = document.getElementById('category-dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Hiển thị dropdown thương hiệu    
+    document.getElementById('brand-name').addEventListener('click', function () {
+        const dropdown = document.getElementById('brand-dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Hiển thị dropdown giới tính
+    document.getElementById('gender-name').addEventListener('click', function () {
+        const dropdown = document.getElementById('gender-dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Hiển thị dropdown size
+    document.getElementById('size-name').addEventListener('click', function () {
+        const dropdown = document.getElementById('size-dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Hiển thị dropdown màu sắc
+    document.getElementById('color-name').addEventListener('click', function () {
+        const dropdown = document.getElementById('color-dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+
+
+    document.addEventListener('click', function (event) {
+        const brandInput = document.getElementById('brand-name');
+        const brandDropdown = document.getElementById('brand-dropdown');
+        const genderInput = document.getElementById('gender-name');
+        const genderDropdown = document.getElementById('gender-dropdown');
+
+        if (!brandInput.contains(event.target) && !brandDropdown.contains(event.target)) {
+            brandDropdown.style.display = 'none';
+        }
+        if (!genderInput.contains(event.target) && !genderDropdown.contains(event.target)) {
+            genderDropdown.style.display = 'none';
+        }
+    });
+
+    // Chọn thương hiệu
+    function selectBrand(id, name) {
+        document.getElementById('brand').value = id;
+        document.getElementById('brand-name').value = name;
+        document.getElementById('brand-dropdown').style.display = 'none';
+    }
+
+    // Chọn giới tính
+    function selectGender(name) {
+        document.getElementById('gender').value = name;
+        document.getElementById('gender-name').value = name;
+        document.getElementById('gender-dropdown').style.display = 'none';
+    }
+    
+    let selectedCategories = [];
+    // Chọn một danh mục
+    function selectCategory(id, name) {
+        if (!selectedCategories.some(category => category.id === id)) {
+            selectedCategories.push({ id, name });
+            updateSelectedCategories();
+        }
+
+        // Đóng dropdown
+        const dropdown = document.getElementById('category-dropdown');
+        dropdown.style.display = 'none';
+    }
+
+    // Xóa danh mục đã chọn
+    function removeCategory(id) {
+        selectedCategories = selectedCategories.filter(category => category.id !== id);
+        updateSelectedCategories();
+    }
+
+    // Cập nhật danh sách danh mục được chọn
+    function updateSelectedCategories() {
+        const selectedContainer = document.getElementById('selected-categories');
+        const inputField = document.getElementById('category');
+
+        // Cập nhật giá trị input ẩn với các id danh mục đã chọn
+        inputField.value = selectedCategories.map(category => category.id).join(',');
+
+        // Hiển thị danh sách danh mục đã chọn
+        selectedContainer.innerHTML = selectedCategories
+            .map(category => `
+                <span class="badge text-center bg-orange me-2">
+                    ${category.name} 
+                    <button 
+                        type="button" 
+                        class="btn-close btn-sm ms-2" 
+                        aria-label="Remove"
+                        onclick="removeCategory('${category.id}')">
+                    </button>
+                </span>
+            `)
+            .join('');
+    }
+
+    let selectedSizes = [];
+    // Chọn một size
+    function selectSize(name) {
+        if (!selectedSizes.includes(name)) {
+            selectedSizes.push(name);
+            updateSelectedSizes();
+        }
+
+        // Đóng dropdown
+        const dropdown = document.getElementById('size-dropdown');
+        dropdown.style.display = 'none';
+    }
+
+    // Xóa size đã chọn
+    function removeSize(name) {
+        selectedSizes = selectedSizes.filter(size => size !== name);
+        updateSelectedSizes();
+    }
+
+    // Cập nhật danh sách size được chọn
+    function updateSelectedSizes() {
+        const selectedContainer = document.getElementById('selected-sizes');
+        const inputField = document.getElementById('size');
+
+        // Cập nhật giá trị input ẩn với các size đã chọn
+        inputField.value = selectedSizes.join(',');
+
+        // Hiển thị danh sách size đã chọn
+        selectedContainer.innerHTML = selectedSizes
+            .map(size => `
+                <span class="badge text-center bg-orange me-2">
+                    ${size} 
+                    <button 
+                        type="button" 
+                        class="btn-close btn-sm ms-2" 
+                        aria-label="Remove"
+                        onclick="removeSize('${size}')">
+                    </button>
+                </span>
+            `)
+            .join('');
+    }
+
+    let selectedColors = [];
+    // Chọn một màu sắc
+    function selectColor(name) {
+        if (!selectedColors.includes(name)) {
+            selectedColors.push(name);
+            updateSelectedColors();
+        }
+
+        // Đóng dropdown
+        const dropdown = document.getElementById('color-dropdown');
+        dropdown.style.display = 'none';
+    }
+
+    // Xóa màu sắc đã chọn
+    function removeColor(name) {
+        selectedColors = selectedColors.filter(color => color !== name);
+        updateSelectedColors();
+    }
+
+    // Cập nhật danh sách màu sắc được chọn
+    function updateSelectedColors() {
+        const selectedContainer = document.getElementById('selected-colors');
+        const inputField = document.getElementById('color');
+
+        // Cập nhật giá trị input ẩn với các màu sắc đã chọn
+        inputField.value = selectedColors.join(',');
+
+        // Hiển thị danh sách màu sắc đã chọn
+        selectedContainer.innerHTML = selectedColors
+            .map(color => `
+                <span class="badge text-center bg-orange me-2">
+                    ${color} 
+                    <button 
+                        type="button" 
+                        class="btn-close btn-sm ms-2" 
+                        aria-label="Remove"
+                        onclick="removeColor('${color}')">
+                    </button>
+                </span>
+            `)
+            .join('');
+    }
+
+    // Ẩn dropdown khi click ngoài vùng dropdown
+    document.addEventListener('click', function (event) {
+        const input = document.getElementById('category-name');
+        const dropdown = document.getElementById('category-dropdown');
+
+        const sizeInput = document.getElementById('size-name');
+        const sizeDropdown = document.getElementById('size-dropdown');
+
+        const colorInput = document.getElementById('color-name');
+        const colorDropdown = document.getElementById('color-dropdown');
+
+        if (!input.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+
+        if (!sizeInput.contains(event.target) && !sizeDropdown.contains(event.target)) {
+            sizeDropdown.style.display = 'none';
+        }
+
+        if (!colorInput.contains(event.target) && !colorDropdown.contains(event.target)) {
+            colorDropdown.style.display = 'none';
+        }
+    });
+
+    document.getElementById('images').addEventListener('change', function (event) {
+        const preview = document.getElementById('image-preview');
+
+        Array.from(event.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Tạo một thẻ div chứa hình ảnh và nút xóa
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('position-relative', 'me-3', 'mb-3');
+                imageContainer.style.width = '100px';
+                imageContainer.style.height = '100px';
+
+                // Tạo thẻ ảnh
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-thumbnail');
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+
+                // Tạo nút xóa
+                const removeBtn = document.createElement('button');
+                removeBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'position-absolute', 'top-0', 'end-0');
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = () => imageContainer.remove(); // Xóa ảnh khi nhấn nút
+
+                // Gắn các phần tử vào div chính
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(removeBtn);
+
+                // Gắn div chính vào preview
+                preview.appendChild(imageContainer);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>

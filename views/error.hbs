@@ -1,0 +1,22 @@
+<div class="error-container">
+        <h1>Đã xảy ra lỗi</h1>
+        <p>{{message}}</p>
+        {{#if error.stack}}
+            <pre>{{error.stack}}</pre>
+        {{/if}}
+</div>
+
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .error-container {
+            background: #f8d7da;
+            padding: 20px;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: inline-block;
+            border-radius: 5px;
+        }
+</style>

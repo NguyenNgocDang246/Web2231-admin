@@ -1,0 +1,193 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container my-5">
+                <h2 class="text-center text-orange me-4">
+                    <i class="fas fa-chart-bar me-2"></i> Doanh Thu Cửa Hàng
+                </h2>
+
+                {{!-- <div class="row my-4 d-flex justify-content-end">
+                    <div class="col-md-4 d-flex justify-content-end">
+                        <label for="type" class="form-label me-2 fw-bold text-orange">Chọn Loại Thống Kê:</label>
+                        <select name="type" id="type" class="form-select">
+                            <option value="day">Ngày</option>
+                            <option value="week">Tuần</option>
+                            <option value="month">Tháng</option>
+                            <option value="year">Quý</option>
+                        </select>
+                    </div>
+                </div> --}}
+
+                <!-- Tổng Quan Doanh Thu -->
+                <div class="row my-4">
+                    <div class="col-md-3 my-1">
+                        <div class="card text-center" style="background-color: #ff6347;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-white">Doanh Thu Tháng</h5>
+                                <p class="card-text text-success text-white my-0"><strong>150,000,000 VND</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 my-1">
+                    <div class="card text-center" style="background-color: #ff6347;">
+                        <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-white">Số Đơn Hàng</h5>
+                        <p class="card-text text-white"><strong>350</strong></p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-3 my-1">
+                    <div class="card text-center" style="background-color: #ff6347;">
+                        <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-white">Sản Phẩm Bán Chạy</h5>
+                        <p class="card-text text-white"><strong>Áo Thun Nam</strong></p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-3 my-1">
+                    <div class="card text-center" style="background-color: #ff6347;">
+                        <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-white">Tăng Trưởng</h5>
+                        <p class="card-text text-primary text-white"><strong>+10%</strong></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Biểu Đồ Doanh Thu -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                    <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Danh Sách Đơn Hàng -->
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Đơn Hàng</h5>
+                        <div class="row my-4 d-flex justify-content-end">
+                            {{!-- Ngày bắt đâu --}}
+                            <div class="col-md-3 d-flex justify-content-end">
+                                <label for="from" class="form-label me-2 fw-bold text-orange">Từ Ngày:</label>
+                                <input type="date" name="from" id="from" class="form-control">
+                            </div>
+                            {{!-- Ngày kết thúc --}}
+                            <div class="col-md-3 d-flex justify-content-end">
+                                <label for="to" class="form-label me-2 fw-bold text-orange">Đến Ngày:</label>
+                                <input type="date" name="to" id="to" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Giảm giá</th>
+                                <th>Trạng thái đơn</th>
+                                <th>Phương thức TT</th>
+                                <th>Trạng thái TT</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each orders}}
+                            <tr>
+                                <td>{{inc @index}}</td>
+                                <td>{{this.user.name}}</td>
+                                <td>{{this.totalAmount}} VND</td>
+                                <td>{{this.discount.value}} VND</td> 
+                                <td>
+                                {{#if (eq this.status "paid")}}
+                                <span class="badge bg-success">Đã Thanh Toán</span>
+                                {{else if (eq this.status "pending")}}
+                                <span class="badge bg-warning">Đang Xử Lý</span>
+                                {{else}}
+                                <span class="badge bg-danger">Không thành công</span>
+                                {{/if}}
+                                </td>
+                                <td>
+                                {{#if (eq this.paymentMethod "cod")}}
+                                <span class="badge bg-primary">COD</span>
+                                {{else}}
+                                <span class="badge bg-info">Chuyển khoản</span>
+                                {{/if}}
+                                </td>
+                                <td>
+                                {{#if (eq this.paymentStatus "paid")}}
+                                <span class="badge bg-success">Đã Thanh Toán</span>
+                                {{else if (eq this.paymentStatus "pending")}}
+                                <span class="badge bg-warning">Chưa Thanh Toán</span>
+                                {{else}}
+                                <span class="badge bg-danger">Không thành công</span>
+                                {{/if}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    {{#if totalPages}}
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {{#if prevPage}}
+                            <li class="page-item">
+                                <a class="page-link" href="/revenue?page={{prevPage}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {{/if}}
+
+                            {{#each pages}}
+                            <li class="page-item {{#ifCond this ../currentPage}}active{{/ifCond}}">
+                                <a class="page-link" href="/revenue?page={{this}}">{{this}}</a>
+                            </li>
+                            {{/each}}
+
+                            {{#if nextPage}}
+                            <li class="page-item">
+                                <a class="page-link" href="/revenue?page={{nextPage}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            {{/if}}
+                        </ul>
+                        </nav>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+        datasets: [{
+            label: 'Doanh Thu (triệu VND)',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+        }
+    });
+</script>
