@@ -8,6 +8,10 @@ module.exports = {
       const currentPage = req.query.page || 1;
       const totalDiscounts = await discountModel.count();
       const discounts = await discountModel.all(currentPage, PER_PAGE);
+      discounts.forEach((discount) => {
+        discount.expiredAt = discount.expiredAt.toISOString().split("T")[0];
+      });
+
       const totalPages = Math.ceil(totalDiscounts / PER_PAGE);
       const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
@@ -22,6 +26,7 @@ module.exports = {
         totalPages,
       });
     } catch (err) {
+      console.log(err);
       next(new CError(500, "Error getting all discounts", err.message));
     }
   },
@@ -29,6 +34,9 @@ module.exports = {
     try {
       const currentPage = req.query.page || 1;
       const discounts = await discountModel.all(currentPage, PER_PAGE);
+      discounts.forEach((discount) => {
+        discount.expiredAt = discount.expiredAt.toISOString().split("T")[0];
+      });
 
       res.json(discounts);
     } catch (err) {
@@ -59,6 +67,8 @@ module.exports = {
     try {
       const id = req.params.id;
       const discount = await discountModel.one(id);
+      discount.expiredAt = discount.expiredAt.toISOString().split("T")[0];
+      
       res.render("discount/one", {
         discount,
         user: req.session.user,
