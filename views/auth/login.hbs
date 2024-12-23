@@ -70,18 +70,15 @@
         })
           .then((response) => {
             if (response.ok) {
-              toastr.success("Đăng nhập thành công!", "Thành công");
-              setTimeout(() => {
-                window.location.href = '/';
-              }, 1000);
+              window.location.href = '/';
             } else {
               return response.json().then((data) => {
-                toastr.error(data.message || "Đăng nhập thất bại!", "Lỗi");
+                toastr.error(data.message || "Đăng nhập thất bại!", "Thông báo");
               });
             }
           })
           .catch((err) => {
-            toastr.error("Có lỗi xảy ra!", "Lỗi");
+            toastr.error("Có lỗi xảy ra!", "Thông báo");
             console.error(err);
           });
       });

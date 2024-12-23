@@ -5,7 +5,6 @@ const passport = require("passport");
 router.get("/login", (req, res) => {
   res.render("auth/login", {
     layout: false,
-    req: req,
   });
 });
 
