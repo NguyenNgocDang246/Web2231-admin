@@ -30,10 +30,10 @@
                             <div class="mb-3">
                                 <label for="gender" class="form-label">Giới tính</label>
                                 <input type="text" class="form-control" id="gender" name="gender" value="{{product.gender}}" hidden required>
-                                <input type="text" class="form-control" id="gender-name" placeholder="-- Chọn giới tính --" readonly required>
+                                <input type="text" class="form-control" id="gender-name" value="{{product.gender}}" placeholder="-- Chọn giới tính --" readonly required>
                                 <div id="gender-dropdown" class="dropdown-menu w-100" style="display: none;">
                                     {{#each genders}}
-                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this.name}}')">{{this.name}}</button>
+                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this}}')">{{this}}</button>
                                     {{/each}}
                                 </div>
                             </div>
@@ -46,7 +46,7 @@
                                     type="text" 
                                     class="form-control" 
                                     id="category-name" 
-                                    value="" 
+                                    value=""
                                     readonly 
                                     onclick="toggleDropdown()"
                                 >
@@ -494,15 +494,12 @@
         });
     });
 
-    // Call update functions to display initial selections
     updateSelectedCategories();
     updateSelectedSizes();
     updateSelectedColors();
 
-    // Set hidden input value for images
     document.getElementById('hid-img').value = selectedImages.join(',');
 
-    // Xóa review
     document.getElementById('delete-review').addEventListener('click', function () {
         const id = this.getAttribute('data-id');
         fetch(`/product/reviews/remove/${id}`, {
