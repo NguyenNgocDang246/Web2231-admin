@@ -90,21 +90,23 @@
 <script src="/js/toast.js"></script>
 <script src="/js/pagination.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {  
-
     let currentPage = JSON.parse(JSON.stringify({{currentPage}}));
     let totalPages = JSON.parse(JSON.stringify({{totalPages}}));
 
     changeActive();
 
-    const rows = document.querySelectorAll('.product-row');
+    const linkToDetail = () => {
+      const rows = document.querySelectorAll('.product-row');
 
-    rows.forEach(row => {
-      row.addEventListener('click', function() {
-        const id = row.getAttribute('data-id');
-        window.location.href = `/product/id=${id}`;
+      rows.forEach(row => {
+        row.addEventListener('click', function() {
+          const id = row.getAttribute('data-id');
+          console.log(id); 
+          window.location.href = `/product/id=${id}`;
+        });
       });
-    });
+    }
+    linkToDetail();
 
     const pageLinks = document.querySelectorAll('.page-link');
 
@@ -136,8 +138,8 @@
             });
 
             document.querySelector('tbody').innerHTML = html;
+            linkToDetail();
           });
-      });
     });
   });
 </script>
