@@ -3,7 +3,7 @@ const router = express.Router();
 const ensureAuthenticated = require("../middlewares/auth");
 
 router.get("/", ensureAuthenticated, (req, res) => {
-  res.render("home", { user: req.session.user });
+  res.render("home", { user: req.session.user, title: "Home" });
 });
 
 module.exports = router;
