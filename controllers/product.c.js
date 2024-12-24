@@ -14,7 +14,7 @@ module.exports = {
       const totalPages = Math.ceil(totalProducts / PER_PAGE);
       const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
       res.render("product/list", {
-        title: "Product List",
+        title: "Sản phẩm",
         user: req.session.user,
         products,
         currentPage,
@@ -58,6 +58,7 @@ module.exports = {
         colors,
         genders,
         reviews,
+        title: "Chi tiết sản phẩm",
       });
     } catch (error) {
       next(new CError(500, "Error get product details", error.message));
@@ -78,6 +79,7 @@ module.exports = {
         sizes,
         colors,
         genders,
+        title: "Thêm sản phẩm",
       });
     } catch (error) {
       next(

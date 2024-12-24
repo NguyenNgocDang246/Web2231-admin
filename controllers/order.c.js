@@ -30,7 +30,7 @@ module.exports = {
       }
 
       res.render("order/revenue", {
-        title: "Order List",
+        title: "Đơn hàng",
         user: req.session.user,
         orders,
         currentPage,
@@ -88,8 +88,10 @@ module.exports = {
         order.discount = { value: 0 };
       }
 
+      console.log(order);
+
       res.render("order/orderDetails", {
-        title: "Order Detail",
+        title: "Chi tiết đơn hàng",
         user: req.session.user,
         order,
         orderStatus: orderModel.ORDER_STATUS,
