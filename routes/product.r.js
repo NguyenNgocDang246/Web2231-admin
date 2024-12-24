@@ -15,14 +15,14 @@ router.post(
   productController.store
 );
 router.post(
-  "/update/:id",
+  "/update/id=:id",
   ensureAuthenticated,
   uploadImage.array("images", 10),
   productController.edit
 );
-router.get("/delete/:id", ensureAuthenticated, productController.delete);
+router.get("/delete/id=:id", ensureAuthenticated, productController.delete);
 router.get(
-  "/reviews/remove/:id",
+  "/reviews/remove/id=:id",
   ensureAuthenticated,
   productController.removeReview
 );

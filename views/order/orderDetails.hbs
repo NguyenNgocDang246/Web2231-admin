@@ -7,7 +7,7 @@
                 <h1 class="text-center mb-4 text-orange">Chi Tiết Đơn Hàng</h1>
                 <div class="card border-orange">
                     <div class="card-body">
-                        <form action="/order/update/{{order._id}}" method="POST" enctype="multipart/form-data">
+                        <form action="/order/update/id={{order._id}}" method="POST" enctype="multipart/form-data">
                             
                             {{!-- Tên khách hàng --}}
                             <div class="mb-3">
@@ -102,28 +102,14 @@
 
                             {{!-- Nút xóa sản phẩm và nút cập nhật sản phẩm --}}
                             <div class="d-flex justify-content-end">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                <button
+                                    type="button"
+                                    class="btn btn-danger mx-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalId"
+                                >
                                     Xóa
                                 </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Xóa Đơn Hàng</h5>
-                                        </div>
-                                        <div class="modal-body">
-                                            Bạn có chắc chắn muốn xóa đơn hàng này không?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                            <a href="/order/delete/{{order._id}}" class="btn btn-danger text-white">Xóa</a>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </div>
                         </form>
@@ -133,3 +119,17 @@
         </main>
     </div>
 </div>
+
+<script>
+    const order = {{{json order}}};
+    modalId.addEventListener('show.bs.modal', function (event) {
+        var modalId = document.getElementById('modalId');
+        var modalBodyText = document.getElementById('modalBodyText');
+        var modalLink = document.getElementById('modalLink');
+
+        modalBodyText.innerText = 'Bạn có chắc chắn muốn xóa đơn hàng này không?';
+        modalLink.href = '/order/delete/id=' + order._id;
+        let button = event.relatedTarget;
+        let recipient = button.getAttribute('data-bs-whatever');
+    });
+</script>
