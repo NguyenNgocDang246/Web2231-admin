@@ -29,6 +29,44 @@
   </head>
 
   <body>
+    <!-- Modal -->
+    <div
+        class="modal fade"
+        id="modalId"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modalTitleId"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-orange text-white">
+                    <h5 class="modal-title" id="modalTitleId">
+                        Cảnh báo
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid" id="modalBodyText"></div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <a id="modalLink" href="" class="btn btn-danger text-white">Xóa</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <header>
       <nav
         class="navbar navbar-expand-lg navbar-light bg-orange text-white px-3 fixed-top"
@@ -62,20 +100,21 @@
           <div class="collapse navbar-collapse" id="navbarContent">
             <!-- Thanh Tìm Kiếm -->
             <div
-              class="d-flex mx-lg-auto ms-auto my-3 my-lg-0 justify-content-end"
+              class="d-flex mx-lg-auto ms-auto my-3 my-lg-0 justify-content-end align-items-center"
               style="max-width: 300px; width: 100%;"
             >
-              <form class="d-flex">
+              <div class="d-flex my-1">
                 <input
                   class="form-control me-2"
                   type="search"
                   placeholder="Tìm kiếm..."
                   aria-label="Search"
+                  id="searchInput"
                 />
-                <button class="btn btn-outline-success" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-              </form>
+                <div id="resultBox" class="list-group mt-1">
+                  <!-- Kết quả tìm kiếm sẽ được thêm vào đây -->
+                </div>
+              </div>
             </div>
 
             <!-- Menu Dropdown -->

@@ -7,7 +7,7 @@
                 <h1 class="text-center mb-4 text-orange">Chi tiết sản phẩm</h1>
                 <div class="card border-orange">
                     <div class="card-body">
-                        <form action="/product/update/{{product._id}}" method="POST" enctype="multipart/form-data">
+                        <form action="/product/update/id={{product._id}}" method="POST" enctype="multipart/form-data">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">Tên sản phẩm</label>
@@ -173,7 +173,14 @@
                             </div>
                             {{!-- Nút xóa sản phẩm và nút cập nhật sản phẩm --}}
                             <div class="d-flex justify-content-end">
-                                <a href="/product/delete/{{product._id}}" class="btn btn-danger mx-3 text-white">Xóa</a>
+                                <button
+                                    type="button"
+                                    class="btn btn-danger mx-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalId"
+                                >
+                                    Xóa
+                                </button>
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </div>
                         </form>
@@ -231,6 +238,20 @@
         </main>
     </div>
 </div>
+
+<script>
+    const product = {{{json product}}};
+    modalId.addEventListener('show.bs.modal', function (event) {
+        var modalId = document.getElementById('modalId');
+        var modalBodyText = document.getElementById('modalBodyText');
+        var modalLink = document.getElementById('modalLink');
+
+        modalBodyText.innerText = 'Bạn có chắc chắn muốn xóa sản phẩm này không?';
+        modalLink.href = `/product/delete/id=${product._id}`;
+        let button = event.relatedTarget;
+        let recipient = button.getAttribute('data-bs-whatever');
+    });
+</script>
 
 <script>
     // Initialize selected categories, sizes, and colors with existing product data
@@ -502,7 +523,7 @@
 
     document.getElementById('delete-review').addEventListener('click', function () {
         const id = this.getAttribute('data-id');
-        fetch(`/product/reviews/remove/${id}`, {
+        fetch(`/product/reviews/remove/id=${id}`, {
             method: 'GET',
         })
             .then(res => res.json())
