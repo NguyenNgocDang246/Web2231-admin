@@ -92,6 +92,8 @@ app.use("/order", require("./routes/order.r"));
 app.use("/category", require("./routes/category.r"));
 app.use("/discount", require("./routes/discount.r"));
 app.use("/brand", require("./routes/brand.r"));
+app.use("/user", require("./routes/user.r"));
+app.use("/search", require("./routes/search.r"));
 
 app.use((req, res, next) => {
   res.setHeader(
