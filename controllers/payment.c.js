@@ -2,14 +2,19 @@ const model = require("../models/payment.m");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+    createUserAccount: async (req, res) => {
+        const userId = req.body.userId;
+        await model.insert({id_user: userId, balance: 1000000000});
+        res.sendStatus(200);
+    },
   getBalance: async (req, res) => {
     const account = await model.getByUserId(req.paymentAccount.id);
     let balance = 0;
 
     if (!account) {
       const newAccount = {
-        ID: req.paymentAccount.id,
-        SoDu: 0,
+        id_user: req.paymentAccount.id,
+        balance: 0,
       };
       try {
         await model.insert(newAccount);
@@ -23,11 +28,16 @@ module.exports = {
   },
 
   transferMoney: async (req, res, next) => {
-    const id = req.body.id;
+    const user = req.paymentAccount;
     const amount = req.body.amount;
-    const result1 = await model.updateBalance(id, -amount);
-    const result2 = await model.updateBalance(-1, amount);
-    res.sendStatus(200);
+    const userAccount = await model.getByUserId(user.id);
+    const shopAccount = await model.getByUserId("-1");
+
+    if(amount > userAccount.balance)
+        return res.status(200).json({message: "Not enough balance"});
+    const result1 = await model.updateBalance(user.id, userAccount.balance - amount);
+    const result2 = await model.updateBalance("-1", shopAccount.balance + amount);
+    return res.status(200).json({message: "success"});
   },
   authenticateToken: (req, res, next) => {
     const authHeader = req.headers["authorization"];
@@ -42,12 +52,12 @@ module.exports = {
   },
 
   getAccessToken: async (req, res) => {
-    const Id = req.body.Id;
-    const user = { id: Id };
+    const id = req.body.id;
+    const user = { id };
     const accessToken = generateAccessToken(user);
-    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-    model.insertRefreshToken(refreshToken);
-    res.json({ accessToken: accessToken, refreshToken: refreshToken });
+    //const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+    //model.insertRefreshToken(refreshToken);
+    res.json({ accessToken: accessToken });
   },
 
   getNewAccessToken: (req, res) => {
