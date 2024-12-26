@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Định nghĩa schema cho User
 const bankAccountSchema = new mongoose.Schema({
-  id_user: { type: String },
+  id_user: { type: String, required: true, unique: true },
   balance: { type: Number },
 });
 
@@ -10,11 +10,34 @@ const bankAccountSchema = new mongoose.Schema({
 const BankAccount = mongoose.model(
   "BankAccount",
   bankAccountSchema,
-  "bank_account"
+  "bankAccounts"
 );
+
+let initalized = false;
+async function createShopAccount() {
+    if(initalized){
+        return;
+    }
+    initalized = true;
+    const existAccount = await BankAccount.findOne({ id_user: "-1" });
+    if(existAccount){
+        return;
+    }
+    const newAccount = {
+        id_user: "-1",
+        balance: 0,
+    };
+    BankAccount.create(newAccount);
+}
+
+async function ensureInitalized() {
+    if(initalized) return;
+    await createShopAccount();
+}
 
 module.exports = {
   all: async (page = 1, accountPerPage = null) => {
+    await ensureInitalized();
     try {
       const skip = (page - 1) * accountPerPage;
       if (accountPerPage) {
@@ -32,6 +55,7 @@ module.exports = {
     }
   },
   one: async (id) => {
+    await ensureInitalized();
     try {
       const account = await BankAccount.findById(id).lean();
       return account;
@@ -40,8 +64,9 @@ module.exports = {
     }
   },
   getByUserId: async (userId) => {
+    await ensureInitalized();
     try {
-      const accounts = await BankAccount.find({ id_user: userId }).lean();
+      const accounts = await BankAccount.findOne({ id_user: userId }).lean();
       return accounts;
     } catch (e) {
       console.error("Error:", e);
@@ -49,6 +74,7 @@ module.exports = {
   },
 
   updateBalance: async (userId, newBalance) => {
+    await ensureInitalized();
     try {
       const updatedAccount = await BankAccount.findOneAndUpdate(
         { id_user: userId },
@@ -56,6 +82,15 @@ module.exports = {
         { new: true, lean: true }
       );
       return updatedAccount;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+  insert: async (account) => {
+    await ensureInitalized();
+    try {
+      const newAccount = await BankAccount.create(account);
+      return newAccount;
     } catch (e) {
       console.error("Error:", e);
     }

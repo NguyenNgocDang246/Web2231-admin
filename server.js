@@ -60,6 +60,7 @@ app.use("/", require("./routes/home"));
 app.use("/product", require("./routes/product.r"));
 app.use("/auth", require("./routes/auth.r"));
 app.use("/revenue", require("./routes/revenue.r"));
+app.use("/payment", require("./routes/payment.r"));
 
 app.use((req, res, next) => {
   res.setHeader(
