@@ -8,18 +8,6 @@
                     <i class="fas fa-chart-bar me-2"></i> Doanh Thu Cửa Hàng
                 </h2>
 
-                {{!-- <div class="row my-4 d-flex justify-content-end">
-                    <div class="col-md-4 d-flex justify-content-end">
-                        <label for="type" class="form-label me-2 fw-bold text-orange">Chọn Loại Thống Kê:</label>
-                        <select name="type" id="type" class="form-select">
-                            <option value="day">Ngày</option>
-                            <option value="week">Tuần</option>
-                            <option value="month">Tháng</option>
-                            <option value="year">Quý</option>
-                        </select>
-                    </div>
-                </div> --}}
-
                 <!-- Tổng Quan Doanh Thu -->
                 <div class="row my-4">
                     <div class="col-md-3 my-1">
@@ -176,13 +164,15 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('revenueChart').getContext('2d');
+    const chartData = {{{json data}}};
+    const labels = {{{json labels}}};
     const revenueChart = new Chart(ctx, {
         type: 'bar',
         data: {
-        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+        labels: labels,
         datasets: [{
-            label: 'Doanh Thu (triệu VND)',
-            data: [12, 19, 3, 5, 2, 3],
+            label: 'Doanh Thu (nghìn VND)',
+            data: chartData,
             backgroundColor: 'rgba(54, 162, 235, 0.5)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
@@ -209,8 +199,8 @@
 {{!-- Pagination --}}
 <script src="/js/pagination.js"></script>
 <script>
-    let currentPage = JSON.parse(JSON.stringify({{currentPage}}));
-    let totalPages = JSON.parse(JSON.stringify({{totalPages}}));
+    let currentPage = {{{json currentPage}}};
+    let totalPages = {{{json totalPages}}};
 
     const addLink = () => {
         const pageLinks = document.querySelectorAll('.page-link');
