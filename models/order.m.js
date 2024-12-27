@@ -153,7 +153,25 @@ module.exports = {
       throw e;
     }
   },
-  ORDER_STATUS: ["pending", "processing", "shipped", "delivered", "cancelled"],
+  getRevenueLast12Months: async () => {
+    const now = new Date();
+    const startDate = new Date(now.getFullYear() - 1, now.getMonth(), 1);
+
+    return Orders.aggregate([
+      { $match: { createdAt: { $gte: startDate } } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          totalRevenue: { $sum: "$totalAmount" },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+    ]);
+  },
+  ORDER_STATUS: ["pending", "shipping", "delivered", "cancelled"],
   PAYMENT_METHOD: ["COD", "online"],
   PAYMENT_STATUS: ["pending", "paid", "failed"],
 };
