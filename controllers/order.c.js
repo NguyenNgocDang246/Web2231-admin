@@ -12,6 +12,7 @@ module.exports = {
       const totalPages = Math.ceil(totalOrders / PER_PAGE);
       const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
+      // Tinh discount cho tung order
       try {
         orders.forEach((order) => {
           if (order.discount) {
@@ -29,6 +30,27 @@ module.exports = {
         next(new CError(500, "Error get discount", error.message));
       }
 
+      // Lay data cho chart
+      const rawData = await orderModel.getRevenueLast12Months();
+      const labels = [];
+      const data = [];
+
+      const now = new Date();
+      for (let i = 11; i >= 0; i--) {
+        const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const label = `T${month.getMonth() + 1}/${month.getFullYear() % 100}`;
+        labels.push(label);
+
+        const monthRevenue = rawData.find(
+          (d) =>
+            d._id.year === month.getFullYear() &&
+            d._id.month === month.getMonth() + 1
+        );
+
+        data.push(monthRevenue ? monthRevenue.totalRevenue : 0);
+      }
+      console.log(data, labels);
+
       res.render("order/revenue", {
         title: "Đơn hàng",
         user: req.session.user,
@@ -38,8 +60,11 @@ module.exports = {
         prevPage: currentPage > 1 ? currentPage - 1 : null,
         nextPage: currentPage < totalPages ? currentPage + 1 : null,
         totalPages,
+        data,
+        labels,
       });
     } catch (error) {
+      console.log("Error get all orders", error.message);
       next(new CError(500, "Error get all orders", error.message));
     }
   },
@@ -68,7 +93,7 @@ module.exports = {
         next(new CError(500, "Error get discount", error.message));
       }
 
-      res.json({orders, totalPages});
+      res.json({ orders, totalPages });
     } catch (error) {
       next(new CError(500, "Error get all orders", error.message));
     }
