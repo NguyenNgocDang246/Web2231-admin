@@ -33,6 +33,9 @@ module.exports = {
     const userAccount = await model.getByUserId(user.id);
     const shopAccount = await model.getByUserId("-1");
 
+    if(!userAccount)
+        return res.status(200).json({message: "User not found"});
+
     if(amount > userAccount.balance)
         return res.status(200).json({message: "Not enough balance"});
     const result1 = await model.updateBalance(user.id, userAccount.balance - amount);
