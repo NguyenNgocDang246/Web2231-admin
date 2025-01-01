@@ -23,49 +23,54 @@
       type="image/x-icon"
     />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+    ></script>
     <title>{{title}}</title>
   </head>
 
   <body>
     <!-- Modal -->
     <div
-        class="modal fade"
-        id="modalId"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="modalTitleId"
-        aria-hidden="true"
+      class="modal fade"
+      id="modalId"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalTitleId"
+      aria-hidden="true"
     >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-orange text-white">
-                    <h5 class="modal-title" id="modalTitleId">
-                        Cảnh báo
-                    </h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid" id="modalBodyText"></div>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <a id="modalLink" href="" class="btn btn-danger text-white">Xóa</a>
-                </div>
-            </div>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-orange text-white">
+            <h5 class="modal-title" id="modalTitleId">
+              Cảnh báo
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid" id="modalBodyText"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <a id="modalLink" href="" class="btn btn-danger text-white">Xóa</a>
+          </div>
         </div>
+      </div>
     </div>
     <header>
       <nav
@@ -233,7 +238,7 @@
         class="text-center p-3"
         style="background-color: rgba(0, 0, 0, 0.05);"
       >
-        © 2020 Copyright HP
+        © 2024 Copyright HP
       </div>
       <!-- Copyright -->
     </footer>

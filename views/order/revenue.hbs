@@ -14,7 +14,7 @@
                         <div class="card text-center" style="background-color: #ff6347;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-white">Doanh Thu Tháng</h5>
-                                <p class="card-text text-success text-white my-0"><strong>150,000,000 VND</strong></p>
+                                <p class="card-text text-success text-white my-0"><strong>{{ totalRevenueInMonth }} VND</strong></p>
                             </div>
                         </div>
                     </div>
@@ -22,15 +22,15 @@
                     <div class="card text-center" style="background-color: #ff6347;">
                         <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-white">Số Đơn Hàng</h5>
-                        <p class="card-text text-white"><strong>350</strong></p>
+                        <p class="card-text text-white"><strong>{{ totalOrdersInMonth }}</strong></p>
                         </div>
                     </div>
                     </div>
                     <div class="col-md-3 my-1">
                     <div class="card text-center" style="background-color: #ff6347;">
                         <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-white">Sản Phẩm Bán Chạy</h5>
-                        <p class="card-text text-white"><strong>Áo Thun Nam</strong></p>
+                        <h5 class="card-title text-white">Sản Phẩm Đã Bán</h5>
+                        <p class="card-text text-white"><strong>{{ totalProductsInMonth }}</strong></p>
                         </div>
                     </div>
                     </div>
@@ -38,7 +38,7 @@
                     <div class="card text-center" style="background-color: #ff6347;">
                         <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-white">Tăng Trưởng</h5>
-                        <p class="card-text text-primary text-white"><strong>+10%</strong></p>
+                        <p class="card-text text-primary text-white"><strong>{{ growth }}</strong></p>
                         </div>
                     </div>
                     </div>
