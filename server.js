@@ -15,6 +15,8 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.set('trust proxy', 1); // Bật trust proxy
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -34,7 +36,7 @@ connectDB()
                     collectionName: 'sessions' // Tên collection để lưu session
                 }),
                 cookie: {
-                    secure: false,
+                    secure: process.env.NODE_ENV === "production",
                     maxAge: 1 * 24 * 60 * 60 * 1000,
                 },
             })
