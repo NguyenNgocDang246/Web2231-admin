@@ -34,12 +34,11 @@ connectDB()
                     collectionName: 'sessions' // Tên collection để lưu session
                 }),
                 cookie: {
-                    secure: process.env.NODE_ENV === "production",
+                    secure: false,
                     maxAge: 1 * 24 * 60 * 60 * 1000,
                 },
             })
         );
-        console.log(process.env.NODE_ENV, process.env.NODE_ENV === "production");
         app.use(passport.initialize());
         app.use(passport.session());
 
