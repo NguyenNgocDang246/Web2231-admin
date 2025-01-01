@@ -49,7 +49,23 @@ module.exports = {
 
         data.push(monthRevenue ? monthRevenue.totalRevenue : 0);
       }
-      console.log(data, labels);
+
+      // Statistics
+      const totalOrdersInMonth = await orderModel.countByDate(
+        new Date(new Date().setDate(1)).toISOString().split("T")[0],
+        new Date()
+      );
+      const totalRevenueInMonth = await orderModel.sumByDate(
+        new Date(new Date().setDate(1)).toISOString().split("T")[0],
+        new Date()
+      );
+      const totalProductsInMonth = await orderModel.countProductByDate(
+        new Date(new Date().setDate(1)).toISOString().split("T")[0],
+        new Date()
+      );
+      const growRate = await orderModel.growthByRevenueComparedToLastMonth();
+      const growth =
+        growRate > 0 ? `+${growRate.toFixed(2)}%` : `${growRate.toFixed(2)}%`;
 
       res.render("order/revenue", {
         title: "Đơn hàng",
@@ -62,6 +78,10 @@ module.exports = {
         totalPages,
         data,
         labels,
+        totalOrdersInMonth,
+        totalRevenueInMonth,
+        totalProductsInMonth,
+        growth,
       });
     } catch (error) {
       console.log("Error get all orders", error.message);
@@ -112,8 +132,6 @@ module.exports = {
       } else {
         order.discount = { value: 0 };
       }
-
-      console.log(order);
 
       res.render("order/orderDetails", {
         title: "Chi tiết đơn hàng",
