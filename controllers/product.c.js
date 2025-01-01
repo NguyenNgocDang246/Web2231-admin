@@ -32,7 +32,6 @@ module.exports = {
     try {
       const currentPage = req.query.page || 1;
       const products = await productModel.all(currentPage, PER_PAGE);
-      console.log(products);
       res.json(products);
     } catch (error) {
       next(new CError(500, "Error get all products", error.message));
@@ -118,9 +117,9 @@ module.exports = {
           brand_id,
           description,
         });
-        res.json({success: true, message: "Thêm sản phẩm thành công"});
+        res.json({ success: true, message: "Thêm sản phẩm thành công" });
       } catch (error) {
-        res.json({success: false, message: "Thêm sản phẩm thất bại"});
+        res.json({ success: false, message: "Thêm sản phẩm thất bại" });
       }
     } catch (error) {
       next(new CError(500, "Error add product", error.message));
