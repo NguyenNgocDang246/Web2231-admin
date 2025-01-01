@@ -60,14 +60,33 @@ module.exports = {
       }
     } catch (e) {
       console.error("Error:", e);
+      throw e;
     }
   },
   one: async (id) => {
     try {
       const user = await Users.findById(id).lean();
+      user.dob = new Date(user.dob).toLocaleDateString();
       return user;
     } catch (e) {
       console.error("Error:", e);
+      throw e;
+    }
+  },
+  count: async () => {
+    try {
+      const totalUsers = await Users.countDocuments();
+      return totalUsers;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+  delete: async (id) => {
+    try {
+      await Users.findByIdAndDelete(id);
+    } catch (e) {
+      console.error("Error:", e);
+      throw e;
     }
   },
   admins: async () => {
@@ -76,6 +95,28 @@ module.exports = {
       return admins;
     } catch (e) {
       console.error("Error:", e);
+      throw e;
+    }
+  },
+  users: async (page = 1, userPerPage = null) => {
+    try {
+      const skip = (page - 1) * userPerPage;
+      if (userPerPage) {
+        const users = await Users.find({ role: {$ne: "admin"} }).skip(skip).limit(userPerPage).lean();
+        users.forEach(user => {
+          user.dob = new Date(user.dob).toLocaleDateString();
+        });
+        return users;
+      } else {
+        const users = await Users.find({ role: {$ne: "admin"} }).skip(skip).lean();
+        users.forEach(user => {
+          user.dob = new Date(user.dob).toLocaleDateString();
+        });
+        return users;
+      }
+    } catch (e) {
+      console.error("Error:", e);
+      throw e;
     }
   },
 };

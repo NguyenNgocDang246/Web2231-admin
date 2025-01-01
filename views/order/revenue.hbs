@@ -1,0 +1,329 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container my-5">
+                <h2 class="text-center text-orange me-4">
+                    <i class="fas fa-chart-bar me-2"></i> Doanh Thu Cửa Hàng
+                </h2>
+
+                <!-- Tổng Quan Doanh Thu -->
+                <div class="row my-4">
+                    <div class="col-md-3 my-1">
+                        <div class="card text-center" style="background-color: #ff6347;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-white">Doanh Thu Tháng</h5>
+                                <p class="card-text text-success text-white my-0"><strong>{{ totalRevenueInMonth }} VND</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 my-1">
+                    <div class="card text-center" style="background-color: #ff6347;">
+                        <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-white">Số Đơn Hàng</h5>
+                        <p class="card-text text-white"><strong>{{ totalOrdersInMonth }}</strong></p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-3 my-1">
+                    <div class="card text-center" style="background-color: #ff6347;">
+                        <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-white">Sản Phẩm Đã Bán</h5>
+                        <p class="card-text text-white"><strong>{{ totalProductsInMonth }}</strong></p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-3 my-1">
+                    <div class="card text-center" style="background-color: #ff6347;">
+                        <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-white">Tăng Trưởng</h5>
+                        <p class="card-text text-primary text-white"><strong>{{ growth }}</strong></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Biểu Đồ Doanh Thu -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                    <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <h2 class="text-center text-orange" id="order-list">
+                    <i class="fas fa-chart-bar me-2"></i> Danh Sách Đơn Hàng
+                </h2>
+                <!-- Danh Sách Đơn Hàng -->
+                <form id="order-form" class="my-4">
+                    <div class="row my-4 d-flex justify-content-end">
+                        {{!-- Ngày bắt đâu --}}
+                        <div class="col-md-3 d-flex justify-content-end">
+                            <label for="from" class="form-label me-2">Từ Ngày:</label>
+                            <input type="date" name="from" id="from" class="form-control">
+                        </div>
+                        {{!-- Ngày kết thúc --}}
+                        <div class="col-md-3 d-flex justify-content-end">
+                            <label for="to" class="form-label">Đến Ngày:</label>
+                            <input type="date" name="to" id="to" class="form-control">
+                        </div>
+                        {{!-- Button tìm kiếm --}}
+                        <button type="submit" class="btn btn-success col-md-2">Tìm Kiếm</button>
+                    </div>
+                </form>
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Đơn Hàng</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Giảm giá</th>
+                                <th>Trạng thái đơn</th>
+                                <th>Phương thức TT</th>
+                                <th>Trạng thái TT</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each orders}}
+                            <tr class="order-row" data-id="{{this._id}}">
+                                <td>{{inc @index}}</td>
+                                <td>{{this.user.name}}</td>
+                                <td>{{this.totalAmount}} VND</td>
+                                <td>{{this.discount.value}} VND</td> 
+                                <td>
+                                {{#if (eq this.status "paid")}}
+                                <span class="badge bg-success">Đã Thanh Toán</span>
+                                {{else if (eq this.status "pending")}}
+                                <span class="badge bg-warning">Đang Xử Lý</span>
+                                {{else}}
+                                <span class="badge bg-danger">Không thành công</span>
+                                {{/if}}
+                                </td>
+                                <td>
+                                {{#if (eq this.paymentMethod "cod")}}
+                                <span class="badge bg-primary">COD</span>
+                                {{else}}
+                                <span class="badge bg-info">Chuyển khoản</span>
+                                {{/if}}
+                                </td>
+                                <td>
+                                {{#if (eq this.paymentStatus "paid")}}
+                                <span class="badge bg-success">Đã Thanh Toán</span>
+                                {{else if (eq this.paymentStatus "pending")}}
+                                <span class="badge bg-warning">Chưa Thanh Toán</span>
+                                {{else}}
+                                <span class="badge bg-danger">Không thành công</span>
+                                {{/if}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                            <!-- Prev Page -->
+                            <li class="page-item p-page {{#if prevPage}}enabled{{else}}disabled{{/if}}">
+                                <div class="page-link" {{#if prevPage}}data-page="{{prevPage}}"{{/if}}>
+                                <span aria-hidden="true">&laquo;</span>
+                                </div>
+                            </li>
+
+                            <!-- Page Numbers -->
+                            {{#each pages}}
+                                <li class="page-item">
+                                <div class="page-link" data-page="{{this}}">{{this}}</div>
+                                </li>
+                            {{/each}}
+
+                            <!-- Next Page -->
+                            <li class="page-item n-page {{#if nextPage}}enabled{{else}}disabled{{/if}}">
+                                <div class="page-link" {{#if nextPage}}data-page="{{nextPage}}"{{/if}}>
+                                <span aria-hidden="true">&raquo;</span>
+                                </div>
+                            </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="/js/toast.js"></script>
+
+{{!-- Graph --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const chartData = {{{json data}}};
+    const labels = {{{json labels}}};
+    const revenueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: labels,
+        datasets: [{
+            label: 'Doanh Thu (nghìn VND)',
+            data: chartData,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+        }
+    });
+
+    const orderRows = document.querySelectorAll('.order-row');
+    orderRows.forEach(row => {
+        row.addEventListener('click', function() {
+            const id = row.getAttribute('data-id');
+            window.location.href = `/order/id=${id}`;
+        });
+    });
+</script>
+
+{{!-- Pagination --}}
+<script src="/js/pagination.js"></script>
+<script>
+    let currentPage = {{{json currentPage}}};
+    let totalPages = {{{json totalPages}}};
+
+    const addLink = () => {
+        const pageLinks = document.querySelectorAll('.page-link');
+        pageLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const page = link.getAttribute('data-page');
+            currentPage = parseInt(page);
+            
+            document.querySelector('.p-page').children[0].setAttribute('data-page', currentPage - 1);
+            document.querySelector('.n-page').children[0].setAttribute('data-page', currentPage + 1);
+
+            changeActive();
+            fetch(`/order/list?page=${page}`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ from: document.querySelector('#from').value, to: document.querySelector('#to').value}),
+            })
+            .then(res => res.json())
+            .then(data => {
+                let html = '';
+                data.orders.forEach((order, index) => {
+                html += `
+                    <tr class="order-row" data-id="${order._id}">
+                    <td>${index + 1}</td>
+                    <td>${order.user.name}</td>
+                    <td>${order.totalAmount} VND</td>
+                    <td>${order.discount.value} VND</td>
+                    <td>
+                        ${order.status === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.status === 'pending' ? '<span class="badge bg-warning">Đang Xử Lý</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                    </td>
+                    <td>
+                        ${order.paymentMethod === 'cod' ? '<span class="badge bg-primary">COD</span>' : '<span class="badge bg-info">Chuyển khoản</span>'}
+                    </td>
+                    <td>
+                        ${order.paymentStatus === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.paymentStatus === 'pending' ? '<span class="badge bg-warning">Chưa Thanh Toán</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                    </td>
+                    </tr>
+                `;
+                });
+
+                document.querySelector('tbody').innerHTML = html;
+            })
+            })
+        });
+    }
+
+    changeActive();
+    addLink();
+
+    // Search Order
+    document.querySelector('#order-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetch(`/order/list?page=1`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ from: document.querySelector('#from').value, to: document.querySelector('#to').value}),
+        })
+        .then(res => res.json())
+        .then(data => {
+            let html = '';
+            data.orders.forEach((order, index) => {
+                html += `
+                <tr class="order-row" data-id="${order._id}">
+                <td>${index + 1}</td>
+                <td>${order.user.name}</td>
+                <td>${order.totalAmount} VND</td>
+                <td>${order.discount.value} VND</td>
+                <td>
+                    ${order.status === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.status === 'pending' ? '<span class="badge bg-warning">Đang Xử Lý</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                </td>
+                <td>
+                    ${order.paymentMethod === 'cod' ? '<span class="badge bg-primary">COD</span>' : '<span class="badge bg-info">Chuyển khoản</span>'}
+                </td>
+                <td>
+                    ${order.paymentStatus === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.paymentStatus === 'pending' ? '<span class="badge bg-warning">Chưa Thanh Toán</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                </td>
+                </tr>
+            `;
+            });
+    
+            document.querySelector('tbody').innerHTML = html;
+
+            currentPage = 1;
+            totalPages = data.totalPages;
+
+            const pagination = document.querySelector('.pagination');
+            pagination.innerHTML = '';
+
+            if (data.totalPages > 1) {
+                pagination.innerHTML += `
+                <li class="page-item p-page disabled">
+                    <div class="page-link" data-page="1">
+                    <span aria-hidden="true">&laquo;</span>
+                    </div>
+                </li>
+                `;
+
+                for (let i = 1; i <= data.totalPages; i++) {
+                pagination.innerHTML += `
+                    <li class="page-item">
+                    <div class="page-link" data-page="${i}">${i}</div>
+                    </li>
+                `;
+                }
+
+                pagination.innerHTML += `
+                <li class="page-item n-page">
+                    <div class="page-link" data-page="2">
+                    <span aria-hidden="true">&raquo;</span>
+                    </div>
+                </li>
+                `;
+            }
+            changeActive();
+
+            const pageLinks = document.querySelectorAll('.page-link');
+            addLink();
+            toastr.success('Tìm kiếm thành công');
+
+        });
+    });
+</script>

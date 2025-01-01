@@ -106,7 +106,7 @@ a {
     background: rgba(255, 255, 255, 1);
     color: black;
     position: fixed;
-    top: 70px;
+    top: 80px;
     left: 15px;
     z-index: 1050;
 }
@@ -121,3 +121,25 @@ a {
     right: 10px;
 }
 
+#order-list {
+    margin-top: 10%;
+}
+
+.order-row {
+    cursor: pointer;
+}
+
+/* Kết quả cho thanh search */
+#resultBox {
+    position: absolute;
+    top: 90%;
+    width: 20%;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: none; /* Ẩn khung kết quả mặc định */
+}
+  
+.list-group-item {
+    cursor: pointer;
+}
