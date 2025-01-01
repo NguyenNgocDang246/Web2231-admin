@@ -7,7 +7,7 @@
                 <h1 class="text-center mb-4 text-orange">Thêm sản phẩm</h1>
                 <div class="card border-orange">
                     <div class="card-body">
-                        <form action="/product/add" method="POST" enctype="multipart/form-data">
+                        <form id="product-form" enctype="multipart/form-data">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">Tên sản phẩm</label>
@@ -17,7 +17,7 @@
                             <!-- Thương hiệu -->
                             <div class="mb-3">
                                 <label for="brand" class="form-label">Thương hiệu</label>
-                                <input type="text" class="form-control" id="brand" name="brand" hidden required>
+                                <input type="text" class="form-control" id="brand" name="brand_id" hidden required>
                                 <input type="text" class="form-control" id="brand-name" placeholder="-- Chọn thương hiệu --" readonly required>
                                 <div id="brand-dropdown" class="dropdown-menu w-100" style="display: none;">
                                     {{#each brands}}
@@ -33,7 +33,7 @@
                                 <input type="text" class="form-control" id="gender-name" placeholder="-- Chọn giới tính --" readonly required>
                                 <div id="gender-dropdown" class="dropdown-menu w-100" style="display: none;">
                                     {{#each genders}}
-                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this.name}}')">{{this.name}}</button>
+                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this}}')">{{this}}</button>
                                     {{/each}}
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
 
                             <!-- Nút thêm -->
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-success">
+                                <button id="submit-btn" class="btn btn-success">
                                     <i class="fas fa-plus-circle"></i> Thêm sản phẩm
                                 </button>
                             </div>
@@ -424,5 +424,29 @@
             };
             reader.readAsDataURL(file);
         });
+    });
+
+    document.getElementById('submit-btn').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const form = document.getElementById('product-form');
+        const formData = new FormData(form);
+
+        fetch('/product/add', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/product';
+                } else {
+                    toastr.error(data.message, "Lỗi");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                toastr.error("Có lỗi xảy ra, vui lòng thử lại sau", "Thêm sản phẩm thất bại");
+            });
     });
 </script>

@@ -50,13 +50,33 @@ module.exports = {
       if (reviewPerPage) {
         const reviews = await Reviews.find(condition)
           .skip(skip)
+          .populate("user")
           .limit(reviewPerPage)
           .lean();
         return reviews;
       } else {
-        const reviews = await Reviews.find(condition).skip(skip).lean();
+        const reviews = await Reviews.find(condition)
+          .skip(skip)
+          .populate("user")
+          .lean();
         return reviews;
       }
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+  count: async () => {
+    try {
+      const totalReviews = await Reviews.countDocuments();
+      return totalReviews;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+  delete: async (id) => {
+    try {
+      const review = await Reviews.findByIdAndDelete(id);
+      return review;
     } catch (e) {
       console.error("Error:", e);
     }

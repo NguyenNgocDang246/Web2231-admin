@@ -1,0 +1,89 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container">
+                <h1 class="text-center mb-4 text-orange">Thêm khuyến mãi</h1>
+                <div class="card border-orange">
+                    <div class="card-body">
+                        <form action="/discount/update/{{discount._id}}" method="POST">
+                            <!-- Tên sản phẩm -->
+                            <div class="mb-3">
+                                <label for="code" class="form-label">Code</label>
+                                <input type="text" class="form-control" id="code" name="code" placeholder="Nhập mã khuyến mãi" value="{{discount.code}}" required>
+                            </div>
+
+                            {{!-- Loại --}}
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Loại</label>
+                                <select class="form-select" id="type" name="type" required>
+                                    {{#each types}}
+                                        <option value="{{this}}" {{#if (eq this discount.type)}}selected{{/if}}>
+                                            {{#if (eq this "percent")}}
+                                            Phần trăm
+                                            {{else}}
+                                            Số tiền
+                                            {{/if}}
+                                        </option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            <!-- Giá trị -->
+                            <div class="mb-3">
+                                <label for="value" class="form-label">Giá trị</label>
+                                <input type="number" class="form-control" id="value" name="value" value="{{discount.value}}" placeholder="Nhập giá trị khuyến mãi" required>
+                            </div>
+                            
+                            {{!-- Ngày hết hạn --}}
+                            <div class="mb-3">
+                                <label for="expiredAt" class="form-label">Ngày hết hạn</label>
+                                <input type="date" class="form-control" id="expiredAt" value="{{discount.expiredAt}}" name="expiredAts" required>
+                            </div>
+
+                            {{!-- Số lượng tối thiểu --}}
+                            <div class="mb-3">
+                                <label for="minAmount" class="form-label">Số lượng tối thiểu</label>
+                                <input type="number" class="form-control" id="minAmount" value="{{discount.minAmount}}" name="minAmount" placeholder="Nhập số lượng tối thiểu" required>
+                            </div>
+
+                            {{!-- Trạng thái --}}
+                            <div class="mb-3">
+                                <label for="isActive" class="form-label">Trạng thái</label>
+                                <input type="checkbox" class="form-check-input" id="isActive" name="isActive" {{#if discount.isActive}}checked{{/if}}>
+                            </div>
+
+                            {{!-- Nút xóa khuyến mãi và nút cập nhật khuyến mãi --}}
+                            <div class="d-flex justify-content-end">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                    Xóa
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Xóa Khuyến Mãi</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa khuyến mãi này không?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <a href="/discount/delete/{{discount._id}}" class="btn btn-danger text-white">Xóa</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

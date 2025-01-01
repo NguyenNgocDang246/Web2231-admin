@@ -24,7 +24,7 @@ module.exports = {
         return categories;
       }
     } catch (e) {
-      console.error("Error:", e);
+      throw e;
     }
   },
   one: async (id) => {
@@ -32,28 +32,28 @@ module.exports = {
       const category = await Category.findById(id).lean();
       return category;
     } catch (e) {
-      console.error("Error:", e);
+      throw e;
     }
   },
-  find: async (condition = {}, page = 1, categoryPerPage = null, sort = {}) => {
+  add: async (category) => {
     try {
-      const skip = (page - 1) * categoryPerPage;
-      if (categoryPerPage) {
-        const categories = await Category.find(condition)
-          .sort(sort)
-          .skip(skip)
-          .limit(categoryPerPage)
-          .lean();
-        return categories;
-      } else {
-        const categories = await Category.find(condition)
-          .sort(sort)
-          .skip(skip)
-          .lean();
-        return categories;
-      }
+      await Category.create(category);
     } catch (e) {
-      console.error("Error:", e);
+      throw e;
+    }
+  },
+  update: async (id, category) => {
+    try {
+      await Category.findByIdAndUpdate(id, category);
+    } catch (e) {
+      throw e;
+    }
+  },
+  delete: async (id) => {
+    try {
+      await Category.findByIdAndDelete(id);
+    } catch (e) {
+      throw e;
     }
   },
 };
