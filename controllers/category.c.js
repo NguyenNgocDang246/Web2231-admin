@@ -32,7 +32,6 @@ module.exports = {
   one: async (req, res, next) => {
     try {
       const category = await categoryModel.one(req.params.id);
-      console.log(category);
       res.render("category/one", {
         category,
         user: req.session.user,
