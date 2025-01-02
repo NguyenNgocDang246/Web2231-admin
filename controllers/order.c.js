@@ -148,24 +148,8 @@ module.exports = {
   update: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const {
-        status,
-        paymentStatus,
-        quantity,
-        shippingAddress,
-        receiverName,
-        paymentMethod,
-      } = req.body;
-      const order = await orderModel.one(id);
 
-      order.status = status;
-      order.paymentStatus = paymentStatus;
-      order.quantity = quantity;
-      order.shippingAddress = shippingAddress;
-      order.receiverName = receiverName;
-      order.paymentMethod = paymentMethod;
-
-      await orderModel.update(order);
+      await orderModel.update(id, req.body);
       res.redirect(`/order`);
     } catch (error) {
       console.log("Error update order", error.message);

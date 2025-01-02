@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+    enum: ["pending", "shipping", "delivered"],
     default: "pending",
   },
   shippingAddress: {
@@ -276,7 +276,6 @@ module.exports = {
         },
       ]);
 
-      console.log(bestSellingProduct);
       return bestSellingProduct[0] || null;
     } catch (e) {
       console.error("Error in OrderModel.bestSeller:", e);
@@ -341,7 +340,7 @@ module.exports = {
       throw e;
     }
   },
-  ORDER_STATUS: ["pending", "shipping", "delivered", "cancelled"],
+  ORDER_STATUS: ["pending", "shipping", "delivered"],
   PAYMENT_METHOD: ["COD", "online"],
   PAYMENT_STATUS: ["pending", "paid", "failed"],
 };

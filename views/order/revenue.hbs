@@ -96,16 +96,16 @@
                                 <td>{{this.totalAmount}} VND</td>
                                 <td>{{this.discount.value}} VND</td> 
                                 <td>
-                                {{#if (eq this.status "paid")}}
-                                <span class="badge bg-success">Đã Thanh Toán</span>
+                                {{#if (eq this.status "shipping")}}
+                                <span class="badge bg-success">Đang vận chuyển</span>
                                 {{else if (eq this.status "pending")}}
                                 <span class="badge bg-warning">Đang Xử Lý</span>
                                 {{else}}
-                                <span class="badge bg-danger">Không thành công</span>
+                                <span class="badge bg-success">Thành công</span>
                                 {{/if}}
                                 </td>
                                 <td>
-                                {{#if (eq this.paymentMethod "cod")}}
+                                {{#if (eq this.paymentMethod "COD")}}
                                 <span class="badge bg-primary">COD</span>
                                 {{else}}
                                 <span class="badge bg-info">Chuyển khoản</span>

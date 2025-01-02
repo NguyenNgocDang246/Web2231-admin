@@ -7,12 +7,12 @@
                 <h1 class="text-center mb-4 text-orange">Chi Tiết Đơn Hàng</h1>
                 <div class="card border-orange">
                     <div class="card-body">
-                        <form action="/order/update/id={{order._id}}" method="POST" enctype="multipart/form-data">
+                        <form action="/order/update/id={{order._id}}" method="POST">
                             
                             {{!-- Tên khách hàng --}}
                             <div class="mb-3">
                                 <label for="cusName" class="form-label">Tên khách hàng</label>
-                                <input id="cusNam" class="form-control" type="text" value="{{order.user.name}}" disabled>
+                                <input id="cusName" class="form-control" type="text" value="{{order.user.name}}" disabled>
                             </div>
 
                             {{!-- Danh sách sản phẩm --}}
@@ -37,7 +37,7 @@
                                                 <td>{{inc @index}}</td>
                                                 <td>{{this.product.name}}</td>
                                                 <td>{{this.product.price}} VND</td>
-                                                <td><input type="number" name="quantity" class="form-control" value="{{this.quantity}}"></td> 
+                                                <td>{{this.quantity}}</td> 
                                             </tr>
                                             {{/each}}
                                             </tbody>
@@ -63,7 +63,7 @@
                                 <label for="status" class="form-label">Trạng Thái</label>
                                 <select id="status" class="form-control" name="status" class="form-select">
                                     {{#each orderStatus}}
-                                    <option value="{{this}}" {{#eq this order.status}}selected{{/eq}}>{{this}}</option>
+                                    <option value="{{this}}" {{#if (eq this ../order.status)}}selected{{/if}}>{{this}}</option>
                                     {{/each}}
                                 </select>
                             </div>
@@ -85,7 +85,7 @@
                                 <label for="payment" class="form-label">Phương Thức Thanh Toán</label>
                                 <select id="payment" class="form-control" name="paymentMethod" class="form-select">
                                     {{#each paymentMethod}}
-                                    <option value="{{this}}" {{#eq this order.paymentMethod}}selected{{/eq}}>{{this}}</option>
+                                    <option value="{{this}}" {{#if (eq this ../order.paymentMethod)}}selected{{/if}}>{{this}}</option>
                                     {{/each}}
                                 </select>
                             </div>
@@ -95,7 +95,7 @@
                                 <label for="paymentStatus" class="form-label">Trạng Thái Thanh Toán</label>
                                 <select id="paymentStatus" class="form-control" name="paymentStatus" class="form-select">
                                     {{#each paymentStatus}}
-                                    <option value="{{this}}" {{#eq this order.paymentStatus}}selected{{/eq}}>{{this}}</option>
+                                    <option value="{{this}}" {{#if (eq this ../order.paymentStatus)}}selected{{/if}}>{{this}}</option>
                                     {{/each}}
                                 </select>
                             </div>
@@ -122,6 +122,7 @@
 
 <script>
     const order = {{{json order}}};
+    console.log(order);
     modalId.addEventListener('show.bs.modal', function (event) {
         var modalId = document.getElementById('modalId');
         var modalBodyText = document.getElementById('modalBodyText');
