@@ -26,7 +26,6 @@ module.exports = {
         totalPages,
       });
     } catch (err) {
-      console.log(err);
       next(new CError(500, "Error getting all discounts", err.message));
     }
   },
@@ -75,7 +74,6 @@ module.exports = {
         types: discountModel.TYPES,
       });
     } catch (err) {
-      console.log(err);
       next(new CError(500, "Error getting edit discount page", err.message));
     }
   },
@@ -85,7 +83,6 @@ module.exports = {
       await discountModel.update(req.params.id, req.body);
       res.redirect("/discount");
     } catch (error) {
-      console.log(error);
       next(new CError(500, "Error updating discount", error.message));
     }
   },
