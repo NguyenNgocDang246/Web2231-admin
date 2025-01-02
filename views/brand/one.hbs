@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                            <a href="/brand/delete/{{brand._id}}" class="btn btn-danger text-white">Xóa</a>
+                                            <button type="button" id="deleteBtn" data-id="{{brand._id}}" class="btn btn-danger text-white">Xóa</button>
                                         </div>
                                         </div>
                                     </div>
@@ -60,3 +60,18 @@
         </main>
     </div>
 </div>
+
+<script>
+    document.getElementById('deleteBtn').addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        fetch('/brand/delete/' + id, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = '/brand';
+            }
+        })
+    });
+</script>

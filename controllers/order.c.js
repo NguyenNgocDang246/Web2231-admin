@@ -176,8 +176,9 @@ module.exports = {
     try {
       const { id } = req.params;
       await orderModel.delete(id);
-      res.redirect(`/order`);
+      res.json({ status: "success" });
     } catch (error) {
+      console.log("Error delete order", error);
       next(new CError(500, "Error delete order", error.message));
     }
   },

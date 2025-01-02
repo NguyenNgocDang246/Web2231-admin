@@ -247,9 +247,17 @@
         var modalLink = document.getElementById('modalLink');
 
         modalBodyText.innerText = 'Bạn có chắc chắn muốn xóa sản phẩm này không?';
-        modalLink.href = `/product/delete/id=${product._id}`;
-        let button = event.relatedTarget;
-        let recipient = button.getAttribute('data-bs-whatever');
+        modalLink.onclick = function () {
+            fetch(`/product/delete/id=${product._id}`, {
+                method: 'DELETE',
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = '/product';
+                    }
+                });
+        };
     });
 </script>
 
@@ -524,7 +532,7 @@
     document.getElementById('delete-review').addEventListener('click', function () {
         const id = this.getAttribute('data-id');
         fetch(`/product/reviews/remove/id=${id}`, {
-            method: 'GET',
+            method: 'DELETE',
         })
             .then(res => res.json())
             .then(data => {

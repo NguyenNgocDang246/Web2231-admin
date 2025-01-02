@@ -7,6 +7,6 @@ router.get("/", ensureAuthenticated, orderController.index);
 router.post("/list", ensureAuthenticated, orderController.list);
 router.get("/id=:id", ensureAuthenticated, orderController.one);
 router.post("/update/id=:id", ensureAuthenticated, orderController.update);
-router.get("/delete/id=:id", ensureAuthenticated, orderController.delete);
+router.delete("/delete/id=:id", ensureAuthenticated, orderController.delete);
 
 module.exports = router;

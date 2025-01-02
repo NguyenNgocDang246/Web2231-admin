@@ -62,7 +62,7 @@ module.exports = {
   },
   one: async (id) => {
     try {
-      const rs = Discount.findById(id).lean();
+      const rs = await Discount.findById(id).lean();
       rs.expiredAt = rs.expiredAt.toISOString().split("T")[0];
       return rs;
     } catch (error) {

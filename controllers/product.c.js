@@ -169,7 +169,7 @@ module.exports = {
     try {
       const id = req.params.id;
       await productModel.delete(id);
-      res.redirect("/product");
+      res.json({ status: "success", message: "Product deleted" });
     } catch (error) {
       next(new CError(500, "Error delete product", error.message));
     }

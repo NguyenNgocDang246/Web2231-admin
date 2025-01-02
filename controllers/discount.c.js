@@ -67,8 +67,7 @@ module.exports = {
     try {
       const id = req.params.id;
       const discount = await discountModel.one(id);
-      discount.expiredAt = discount.expiredAt.toISOString().split("T")[0];
-      
+
       res.render("discount/one", {
         discount,
         user: req.session.user,
@@ -76,21 +75,24 @@ module.exports = {
         types: discountModel.TYPES,
       });
     } catch (err) {
+      console.log(err);
       next(new CError(500, "Error getting edit discount page", err.message));
     }
   },
   update: async (req, res, next) => {
     try {
+      req.body.isActive = req.body.isActive === "on";
       await discountModel.update(req.params.id, req.body);
       res.redirect("/discount");
     } catch (error) {
-      next(new CError(500, "Error updating discount", err.message));
+      console.log(error);
+      next(new CError(500, "Error updating discount", error.message));
     }
   },
   delete: async (req, res, next) => {
     try {
       await discountModel.delete(req.params.id);
-      res.redirect("/discount");
+      res.json({ status: "success" });
     } catch (err) {
       next(new CError(500, "Error deleting discount", err.message));
     }

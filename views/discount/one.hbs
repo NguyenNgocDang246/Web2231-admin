@@ -50,7 +50,7 @@
 
                             {{!-- Trạng thái --}}
                             <div class="mb-3">
-                                <label for="isActive" class="form-label">Trạng thái</label>
+                                <label for="isActive" class="form-label">Hoạt động: </label>
                                 <input type="checkbox" class="form-check-input" id="isActive" name="isActive" {{#if discount.isActive}}checked{{/if}}>
                             </div>
 
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                            <a href="/discount/delete/{{discount._id}}" class="btn btn-danger text-white">Xóa</a>
+                                            <button id="deleteBtn" data-id="{{discount._id}}" class="btn btn-danger text-white">Xóa</button>
                                         </div>
                                         </div>
                                     </div>
@@ -87,3 +87,19 @@
         </main>
     </div>
 </div>
+
+<script>
+    document.getElementById('deleteBtn').addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        fetch('/discount/delete/' + id, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = '/discount';
+            }
+        })
+        .catch(err => console.log(err));
+    });
+</script>

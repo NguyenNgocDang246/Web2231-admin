@@ -52,7 +52,7 @@ module.exports = {
   delete: async (req, res, next) => {
     try {
       await categoryModel.delete(req.params.id);
-      res.redirect("/category");
+      res.json({ status: "success" });
     } catch (err) {
       next(new CError(500, "Error deleting category", err.message));
     }

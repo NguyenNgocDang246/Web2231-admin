@@ -20,8 +20,8 @@ router.post(
   uploadImage.array("images", 10),
   productController.edit
 );
-router.get("/delete/id=:id", ensureAuthenticated, productController.delete);
-router.get(
+router.delete("/delete/id=:id", ensureAuthenticated, productController.delete);
+router.delete(
   "/reviews/remove/id=:id",
   ensureAuthenticated,
   productController.removeReview

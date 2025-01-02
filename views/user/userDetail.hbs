@@ -56,8 +56,19 @@
         var modalLink = document.getElementById('modalLink');
 
         modalBodyText.innerText = 'Bạn có chắc chắn muốn xóa người dùng ' + user.name + ' không?';
-        modalLink.href = '/user/delete/id=' + user._id;
-        let button = event.relatedTarget;
-        let recipient = button.getAttribute('data-bs-whatever');
+        modalLink.onclick = function() {
+            fetch('/user/delete/' + user.id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = '/user';
+                }
+            });
+        }
     });
 </script>

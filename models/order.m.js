@@ -1,67 +1,66 @@
 const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
-    },
-    items: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "product",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-          min: 1,
-        },
-      },
-    ],
-    totalAmount: {
-      type: Number,
-      required: true,
-    },
-    discount: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "discount",
-      default: null,
-    },
-    status: {
-      type: String,
-      enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
-      default: "pending",
-    },
-    shippingAddress: {
-      type: String,
-      required: true,
-    },
-    paymentMethod: {
-      type: String,
-      enum: ["COD", "online"],
-      default: "COD",
-    },
-    paymentStatus: {
-      type: String,
-      enum: ["pending", "paid", "failed"],
-      default: "pending",
-    },
-    receiverName: {
-      type: String,
-    },
-    insurance: {
-      type: String,
-      enum: ["yes", "no"],
-      default: "no",
-    },
+const orderSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  items: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product",
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
+    },
+  ],
+  totalAmount: {
+    type: Number,
+    required: true,
+  },
+  discount: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "discount",
+    default: null,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+    default: "pending",
+  },
+  shippingAddress: {
+    type: String,
+    required: true,
+  },
+  paymentMethod: {
+    type: String,
+    enum: ["COD", "online"],
+    default: "COD",
+  },
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid", "failed"],
+    default: "pending",
+  },
+  receiverName: {
+    type: String,
+  },
+  insurance: {
+    type: String,
+    enum: ["yes", "no"],
+    default: "no",
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 const Orders = mongoose.model("order", orderSchema, "orders");
 
@@ -80,14 +79,15 @@ module.exports = {
 
       if (orderPerPage) {
         const orders = await Orders.find()
-          .where("createdAt")
+          .where("date")
           .gte(startDate)
           .lte(endDate)
           .populate("user")
           .populate("discount")
-          .skip(skip)
-          .limit(orderPerPage)
+          // .skip(skip)
+          // .limit(orderPerPage)
           .lean();
+
         return orders;
       } else {
         const orders = await Orders.find()
@@ -116,7 +116,7 @@ module.exports = {
       startDate = startDate ? new Date(startDate) : new Date(0);
       endDate = endDate ? new Date(endDate) : new Date();
       const totalOrders = await Orders.countDocuments({
-        createdAt: {
+        date: {
           $gte: new Date(startDate),
           $lte: new Date(endDate),
         },
@@ -134,7 +134,7 @@ module.exports = {
       const totalRevenue = await Orders.aggregate([
         {
           $match: {
-            createdAt: {
+            date: {
               $gte: new Date(startDate),
               $lte: new Date(endDate),
             },
@@ -166,7 +166,7 @@ module.exports = {
       const totalProductsSold = await Orders.aggregate([
         {
           $match: {
-            createdAt: { $gte: startDate, $lte: endDate },
+            date: { $gte: startDate, $lte: endDate },
           },
         },
         { $unwind: "$items" },
@@ -215,12 +215,12 @@ module.exports = {
     const startDate = new Date(now.getFullYear() - 1, now.getMonth(), 1);
 
     return Orders.aggregate([
-      { $match: { createdAt: { $gte: startDate } } },
+      { $match: { date: { $gte: startDate } } },
       {
         $group: {
           _id: {
-            year: { $year: "$createdAt" },
-            month: { $month: "$createdAt" },
+            year: { $year: "$date" },
+            month: { $month: "$date" },
           },
           totalRevenue: { $sum: "$totalAmount" },
         },
@@ -243,7 +243,7 @@ module.exports = {
       const bestSellingProduct = await Orders.aggregate([
         {
           $match: {
-            createdAt: { $gte: startDate, $lte: endDate },
+            date: { $gte: startDate, $lte: endDate },
           },
         },
         { $unwind: "$items" },
@@ -293,7 +293,7 @@ module.exports = {
       const lastMonthRevenue = await Orders.aggregate([
         {
           $match: {
-            createdAt: { $gte: startLastMonth, $lte: endLastMonth },
+            date: { $gte: startLastMonth, $lte: endLastMonth },
           },
         },
         {
@@ -307,7 +307,7 @@ module.exports = {
       const currentMonthRevenue = await Orders.aggregate([
         {
           $match: {
-            createdAt: { $gte: startCurrentMonth },
+            date: { $gte: startCurrentMonth },
           },
         },
         {
@@ -331,6 +331,13 @@ module.exports = {
         "Error in OrderModel.growthByRevenueComparedToLastMonth:",
         e
       );
+      throw e;
+    }
+  },
+  delete: async (id) => {
+    try {
+      await Orders.findByIdAndDelete(id);
+    } catch (e) {
       throw e;
     }
   },

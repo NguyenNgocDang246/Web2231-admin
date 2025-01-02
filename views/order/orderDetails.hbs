@@ -128,8 +128,17 @@
         var modalLink = document.getElementById('modalLink');
 
         modalBodyText.innerText = 'Bạn có chắc chắn muốn xóa đơn hàng này không?';
-        modalLink.href = '/order/delete/id=' + order._id;
-        let button = event.relatedTarget;
-        let recipient = button.getAttribute('data-bs-whatever');
+        modalLink.onclick = function () {
+            fetch('/order/delete/id=' + order._id, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = '/order';
+                }
+            })
+            .catch(err => console.log(err));
+        };
     });
 </script>

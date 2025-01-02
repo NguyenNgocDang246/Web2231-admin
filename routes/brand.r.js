@@ -8,6 +8,6 @@ router.get("/add", ensureAuthenticated, brandController.add);
 router.post("/add", ensureAuthenticated, brandController.store);
 router.get("/id=:id", ensureAuthenticated, brandController.one);
 router.post("/update/:id", ensureAuthenticated, brandController.update);
-router.get("/delete/:id", ensureAuthenticated, brandController.delete);
+router.delete("/delete/:id", ensureAuthenticated, brandController.delete);
 
 module.exports = router;
