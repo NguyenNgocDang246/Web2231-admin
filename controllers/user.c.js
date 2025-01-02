@@ -39,13 +39,25 @@ module.exports = {
     try {
       const id = req.params.id;
       const user = await userModel.one(id);
+      const roles = userModel.USER_ROLE;
       res.render("user/userDetail", {
         user: req.session.user,
         thisUser: user,
         title: "Thông tin người dùng",
+        roles,
       });
     } catch (error) {
       next(new CError(500, "Error get user", error.message));
+    }
+  },
+  update: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const user = req.body;
+      await userModel.update(id, user);
+      res.redirect("/user");
+    } catch (error) {
+      next(new CError(500, "Error update user", error.message));
     }
   },
   delete: async (req, res, next) => {

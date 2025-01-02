@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "user"],
+      enum: ["admin", "normal_user", "vip_user"],
     },
   },
   {
@@ -89,6 +89,14 @@ module.exports = {
       throw e;
     }
   },
+  update: async (id, user) => {
+    try {
+      await Users.findByIdAndUpdate(id, user);
+    } catch (e) {
+      console.error("Error:", e);
+      throw e;
+    }
+  },
   admins: async () => {
     try {
       const admins = await Users.find({ role: "admin" }).lean();
@@ -102,14 +110,19 @@ module.exports = {
     try {
       const skip = (page - 1) * userPerPage;
       if (userPerPage) {
-        const users = await Users.find({ role: {$ne: "admin"} }).skip(skip).limit(userPerPage).lean();
-        users.forEach(user => {
+        const users = await Users.find({ role: { $ne: "admin" } })
+          .skip(skip)
+          .limit(userPerPage)
+          .lean();
+        users.forEach((user) => {
           user.dob = new Date(user.dob).toLocaleDateString();
         });
         return users;
       } else {
-        const users = await Users.find({ role: {$ne: "admin"} }).skip(skip).lean();
-        users.forEach(user => {
+        const users = await Users.find({ role: { $ne: "admin" } })
+          .skip(skip)
+          .lean();
+        users.forEach((user) => {
           user.dob = new Date(user.dob).toLocaleDateString();
         });
         return users;
@@ -119,4 +132,5 @@ module.exports = {
       throw e;
     }
   },
+  USER_ROLE: ["admin", "normal_user", "vip_user"],
 };
