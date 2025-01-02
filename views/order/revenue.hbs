@@ -189,12 +189,12 @@
         }
     });
 
-    const orderRows = document.querySelectorAll('.order-row');
-    orderRows.forEach(row => {
-        row.addEventListener('click', function() {
-            const id = row.getAttribute('data-id');
-            window.location.href = `/order/id=${id}`;
-        });
+    document.querySelector("tbody").addEventListener('click', function(e) {
+        const orderRow = e.target.closest('.order-row');
+        if (orderRow) {
+            const orderId = orderRow.getAttribute('data-id');
+            window.location.href = `/order/id=${orderId}`;
+        }
     });
 </script>
 

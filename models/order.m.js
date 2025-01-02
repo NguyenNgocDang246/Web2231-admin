@@ -118,7 +118,6 @@ module.exports = {
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
 
-      console.log(startDate, endDate);
       const totalOrders = await Orders.countDocuments({
         date: {
           $gte: startDate,

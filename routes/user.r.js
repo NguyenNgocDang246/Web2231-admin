@@ -5,6 +5,7 @@ const router = express.Router();
 router.get("/", userController.index);
 router.get("/list", userController.list);
 router.get("/id=:id", userController.one);
+router.post("/update/id=:id", userController.update);
 router.delete("/delete/id=:id", userController.delete);
 
 module.exports = router;
