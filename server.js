@@ -96,7 +96,6 @@ connectDB()
     app.use("/user", require("./routes/user.r"));
     app.use("/search", require("./routes/search.r"));
     app.use("/payment", require("./routes/payment.r"));
-    app.use("/revenue", require("./routes/revenue.r"));
 
     // Middleware cho 404 và lỗi
     app.use((err, req, res, next) => {
