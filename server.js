@@ -22,7 +22,6 @@ app.set("trust proxy", 1); // Bật trust proxy
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-
 app.use(flash());
 
 // Kết nối tới MongoDB và khởi tạo session
@@ -80,12 +79,10 @@ connectDB()
       },
     });
 
-    // Đặt engine cho Handlebars
     app.engine("hbs", hbs.engine);
     app.set("view engine", "hbs");
     app.set("views", "./views");
 
-    // Các route
     app.use("/", require("./routes/home"));
     app.use("/product", require("./routes/product.r"));
     app.use("/auth", require("./routes/auth.r"));
@@ -97,7 +94,6 @@ connectDB()
     app.use("/search", require("./routes/search.r"));
     app.use("/payment", require("./routes/payment.r"));
 
-    // Middleware cho 404 và lỗi
     app.use((err, req, res, next) => {
       if (app.get("env") === "development") {
         res.status(err.status || 500).render("error", {
@@ -114,7 +110,6 @@ connectDB()
       }
     });
 
-    // Cấu hình bảo mật Content-Security-Policy
     app.use((req, res, next) => {
       res.setHeader(
         "Content-Security-Policy",
@@ -122,6 +117,16 @@ connectDB()
       );
       next();
     });
+
+    // const https = require('https');
+    // const fs = require('fs');
+    // const privateKey = fs.readFileSync('./sslkeys/key.pem', 'utf8');
+    // const certificate = fs.readFileSync('./sslkeys/cert.pem', 'utf8');
+    // const credentials = { key: privateKey, cert: certificate };
+    // const httpsServer = https.createServer(credentials, app);
+    // httpsServer.listen(PORT, () => {
+    //     console.log(`Server running at https://localhost:${PORT}`);
+    // });
 
     // Khởi động server
     app.listen(PORT, () => {
