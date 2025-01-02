@@ -79,7 +79,7 @@ module.exports = {
         data,
         labels,
         totalOrdersInMonth,
-        totalRevenueInMonth,
+        totalRevenueInMonth: totalRevenueInMonth / 1000000,
         totalProductsInMonth,
         growth,
       });
