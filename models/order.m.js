@@ -84,8 +84,8 @@ module.exports = {
           .lte(endDate)
           .populate("user")
           .populate("discount")
-          // .skip(skip)
-          // .limit(orderPerPage)
+          .skip(skip)
+          .limit(orderPerPage)
           .lean();
 
         return orders;
@@ -115,10 +115,14 @@ module.exports = {
     try {
       startDate = startDate ? new Date(startDate) : new Date(0);
       endDate = endDate ? new Date(endDate) : new Date();
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+
+      console.log(startDate, endDate);
       const totalOrders = await Orders.countDocuments({
         date: {
-          $gte: new Date(startDate),
-          $lte: new Date(endDate),
+          $gte: startDate,
+          $lte: endDate,
         },
       });
       return totalOrders;

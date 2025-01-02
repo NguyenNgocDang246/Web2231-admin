@@ -9,8 +9,8 @@ router.get("/", ensureAuthenticated, async (req, res) => {
   const totalProducts = await productModel.count();
   const totalUsers = await userModel.count();
   const totalOrdersInMonth = await orderModel.countByDate(
-    new Date(new Date().setDate(1)).toISOString().split("T")[0],
-    new Date()
+    new Date(new Date().setDate(1)),
+    new Date().toISOString()
   );
   res.render("home", {
     user: req.session.user,
