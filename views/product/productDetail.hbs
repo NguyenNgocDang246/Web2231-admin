@@ -210,16 +210,15 @@
                                                             {{this.user.name}}
                                                             <span class="text-body ms-2">{{this.comment}}</span>
                                                         </h6>
-                                                        <p class="mb-0">{{#dateFormat this.createdAt}}{{/dateFormat}}</p>
                                                         </div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                         <p class="small mb-0" style="color: #aaa;">
-                                                            <a style="cursor: pointer;" id="delete-review" class="link-grey" data-id="{{this._id}}">Remove</a>
+                                                            <button style="cursor: pointer;" id="delete-review" class="link-grey" data-id="{{this._id}}">Remove</button>
                                                             {{!-- <a href="#!" class="link-grey">Reply</a> •
                                                             <a href="#!" class="link-grey">Translate</a> --}}
                                                         </p>
                                                         <div class="d-flex flex-row">
-                                                            <i class="fas fa-star text-warning me-2"></i>
+                                                            <i class="fas fa-star text-warning me-2"> {{this.rating}}</i>
                                                             <i class="far fa-check-circle" style="color: #aaa;"></i>
                                                         </div>
                                                         </div>
@@ -231,7 +230,7 @@
                                     </div>
                                 </div>
                             </div>
-                            </section>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -541,6 +540,7 @@
                     reviewCard.forEach(review => {
                         if (review.getAttribute("data-id") === id) review.style.display = 'none';
                     })
+                    toastr.success(data.message, "Thành công");
                 }
             });
 

@@ -117,7 +117,11 @@ module.exports = {
           brand_id,
           description,
         });
-        res.json({ success: true, message: "Thêm sản phẩm thành công" });
+        res.json({
+          success: true,
+          message: "Thêm sản phẩm thành công",
+          id: rs._id,
+        });
       } catch (error) {
         res.json({ success: false, message: "Thêm sản phẩm thất bại" });
       }
@@ -179,7 +183,7 @@ module.exports = {
     try {
       const id = req.params.id;
       await reviewModel.delete(id);
-      res.json({ message: "Review deleted" });
+      res.json({ message: "Đã xóa đánh giá" });
     } catch (error) {
       next(new CError(500, "Error delete review", error.message));
     }
