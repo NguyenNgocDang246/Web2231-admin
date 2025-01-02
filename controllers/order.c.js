@@ -47,7 +47,7 @@ module.exports = {
             d._id.month === month.getMonth() + 1
         );
 
-        data.push(monthRevenue ? monthRevenue.totalRevenue : 0);
+        data.push(monthRevenue ? monthRevenue.totalRevenue / 1000 : 0);
       }
 
       // Statistics

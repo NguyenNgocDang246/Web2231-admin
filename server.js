@@ -24,7 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(flash());
 
-// Kết nối tới MongoDB và khởi tạo session
 connectDB()
   .then(() => {
     const sessionDbConnection = mongoose.createConnection(
