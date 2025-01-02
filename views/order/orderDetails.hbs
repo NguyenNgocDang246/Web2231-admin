@@ -22,26 +22,28 @@
                                         <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Sản Phẩm</h5>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Tên Sản Phẩm</th>
-                                                <th>Giá</th>
-                                                <th>Số Lượng</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {{#each order.items}}
-                                            <tr>
-                                                <td>{{inc @index}}</td>
-                                                <td>{{this.product.name}}</td>
-                                                <td>{{this.product.price}} VND</td>
-                                                <td>{{this.quantity}}</td> 
-                                            </tr>
-                                            {{/each}}
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Tên Sản Phẩm</th>
+                                                    <th>Giá</th>
+                                                    <th>Số Lượng</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {{#each order.items}}
+                                                <tr>
+                                                    <td>{{inc @index}}</td>
+                                                    <td>{{this.product.name}}</td>
+                                                    <td>{{this.product.price}} VND</td>
+                                                    <td>{{this.quantity}}</td> 
+                                                </tr>
+                                                {{/each}}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

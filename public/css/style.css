@@ -1,145 +1,151 @@
 :root {
-    --sidebar-color: #ff6347;
-    --link-hover-bg: #e2482c;
+  --sidebar-color: #ff6347;
+  --link-hover-bg: #e2482c;
 }
 
 a {
-    text-decoration: none !important;
-    color: inherit !important;
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
 .bg-orange {
-    background-color: #FF6347 !important; /* Cam đậm */
-    color: white;
+  background-color: #ff6347 !important; /* Cam đậm */
+  color: white;
 }
 
 .dropdown-item:hover {
-    background-color: #FF6347 !important; /* Cam đậm */
-    color: white;
+  background-color: #ff6347 !important; /* Cam đậm */
+  color: white;
 }
 
 .text-orange {
-    color: #FF6347 !important; /* Cam đậm */
+  color: #ff6347 !important; /* Cam đậm */
 }
 
 .border-orange {
-    border: 2px solid #FF6347 !important; /* Cam đậm */
+  border: 2px solid #ff6347 !important; /* Cam đậm */
 }
 
 .main-content {
-    margin-top: 10%;
-    margin-bottom: 5%;
-    min-height: 50vh;
+  margin-top: 10%;
+  margin-bottom: 5%;
+  min-height: 50vh;
 }
 
 .sidebar {
-    border-radius: 5px;
-    margin-top: 5%;
+  border-radius: 5px;
+  margin-top: 5%;
 }
 
 .sidebar .nav-item .nav-link:hover {
-    background-color: var(--link-hover-bg);
+  background-color: var(--link-hover-bg);
 }
 
 @media (max-width: 768px) {
-    #avt-section {
-        display: none;
-    }
-    .sidebar {
-        margin-top: 0;
-    }
-    #admin-sidebar {
-        margin-top: 20%;
-    }
-    .main-content {
-        margin-top: 22%;
-    }
+  #avt-section {
+    display: none;
+  }
+  .sidebar {
+    margin-top: 0;
+  }
+  #admin-sidebar {
+    margin-top: 20%;
+  }
+  .main-content {
+    margin-top: 22%;
+  }
 }
 
 /* Scroll top button */
 #scrollToTop {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 15px;
-    font-size: 18px;
-    background-color: rgba(255, 255, 255, 1);
-    color: black;
-    border: none;
-    border-radius:  50%;
-    cursor: pointer;
-    z-index: 1000;
-    transition: opacity 0.3s;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  font-size: 18px;
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  transition: opacity 0.3s;
 }
 #scrollToTop:hover {
-    background-color: gray;
+  background-color: gray;
 }
 /* Sidebar mở */
 .sidebar-open #sidebar {
-    left: 0;
+  left: 0;
 }
 
 /* Overlay hiển thị */
 .sidebar-open #sidebar-overlay {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 #adminSidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 1040;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1040;
 }
 
 #adminSidebar.show {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
 #admin-sidebar-toggle {
-    display: none;
-    width: 40px;
-    background: rgba(255, 255, 255, 1);
-    color: black;
-    position: fixed;
-    top: 80px;
-    left: 15px;
-    z-index: 1050;
+  display: none;
+  width: 40px;
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  position: fixed;
+  top: 80px;
+  left: 15px;
+  z-index: 1050;
 }
 
 #admin-sidebar-toggle.show {
-    display: block;
+  display: block;
 }
 
 #admin-sidebar-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 #order-list {
-    margin-top: 10%;
+  margin-top: 10%;
 }
 
 .order-row {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* Kết quả cho thanh search */
 #resultBox {
-    position: absolute;
-    top: 90%;
-    width: 20%;
-    z-index: 1000;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    display: none; /* Ẩn khung kết quả mặc định */
+  position: absolute;
+  top: 90%;
+  width: 20%;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  display: none; /* Ẩn khung kết quả mặc định */
 }
-  
+
 .list-group-item {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  #resultBox {
+    width: 50%;
+  }
 }

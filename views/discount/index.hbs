@@ -12,30 +12,32 @@
        <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Khuyến Mãi</h5>
       </div>
       <div class="card-body">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr class="text-center">
-              <th>STT</th>
-              <th>Code</th>
-              <th>Loại</th>
-              <th>Giá trị</th>
-              <th>Ngày hết hạn</th>
-              <th>SL Tối thiểu</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each discounts}}
-              <tr class="product-row text-center" data-id="{{this._id}}">
-                <td class="text-center">{{inc @index}}</td>
-                <td>{{this.code}}</td>
-                <td>{{this.type}}</td>
-                <td>{{this.value}}</td>
-                <td>{{this.expiredAt}}</td>
-                <td>{{this.minAmount}}</td>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>STT</th>
+                <th>Code</th>
+                <th>Loại</th>
+                <th>Giá trị</th>
+                <th>Ngày hết hạn</th>
+                <th>SL Tối thiểu</th>
               </tr>
-            {{/each}}
-          </tbody>
-        </table>           
+            </thead>
+            <tbody>
+              {{#each discounts}}
+                <tr class="product-row text-center" data-id="{{this._id}}">
+                  <td class="text-center">{{inc @index}}</td>
+                  <td>{{this.code}}</td>
+                  <td>{{this.type}}</td>
+                  <td>{{this.value}}</td>
+                  <td>{{this.expiredAt}}</td>
+                  <td>{{this.minAmount}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>  
+        </div>         
       </div>
 
       <div class="d-flex justify-content-center">

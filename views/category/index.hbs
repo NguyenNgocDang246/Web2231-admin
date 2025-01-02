@@ -12,24 +12,26 @@
        <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Danh Mục</h5>
       </div>
       <div class="card-body">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr class="text-center">
-              <th>STT</th>
-              <th>Tên danh mục</th>
-              <th>Mô tả</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each categories}}
-              <tr class="product-row" data-id="{{this._id}}">
-                <td class="text-center">{{inc @index}}</td>
-                <td>{{this.name}}</td>
-                <td>{{this.description}}</td>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>STT</th>
+                <th>Tên danh mục</th>
+                <th>Mô tả</th>
               </tr>
-            {{/each}}
-          </tbody>
-        </table>           
+            </thead>
+            <tbody>
+              {{#each categories}}
+                <tr class="product-row" data-id="{{this._id}}">
+                  <td class="text-center">{{inc @index}}</td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.description}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table> 
+        </div>          
       </div>
     </div>
   </main>

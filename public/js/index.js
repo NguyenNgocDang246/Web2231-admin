@@ -43,7 +43,7 @@ const resultBox = document.getElementById("resultBox");
 
 searchInput.addEventListener("input", async () => {
   const query = searchInput.value.trim();
-  
+
   if (query.length > 0) {
     const response = await fetch(`/search?query=${query}`);
     const results = await response.json();
@@ -58,7 +58,8 @@ searchInput.addEventListener("input", async () => {
         .join("");
       resultBox.style.display = "block";
     } else {
-      resultBox.innerHTML = "<p class='text-muted text-black text-align-center'>Không có kết quả.</p>";
+      resultBox.innerHTML =
+        "<p class='text-muted text-black text-align-center'>Không có kết quả.</p>";
     }
   } else {
     resultBox.style.display = "none";
@@ -70,5 +71,3 @@ document.addEventListener("click", (e) => {
     resultBox.style.display = "none";
   }
 });
-
-

@@ -12,32 +12,34 @@
        <h5 class="mb-0"><i class="fas fa-receipt me-2"></i> Danh Sách Sản Phẩm</h5>
       </div>
       <div class="card-body">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr class="text-center">
-              <th>STT</th>
-              <th>Tên sản phẩm</th>
-              <th>Giá</th>
-              <th>Màu sắc</th>
-              <th>Size</th>
-              <th>Số lượng</th>
-              <th>Thương hiệu</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each products}}
-              <tr class="product-row text-center" data-id="{{this._id}}">
-                <td>{{inc @index}}</td>
-                <td>{{this.name}}</td>
-                <td>{{this.price}}</td>
-                <td>{{#each this.colors}}{{this}} {{/each}}</td>
-                <td>{{#each this.size}}{{this}} {{/each}}</td>
-                <td>{{this.stock}}</td>
-                <td>{{this.brand_id.name}}</td>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Màu sắc</th>
+                <th>Size</th>
+                <th>Số lượng</th>
+                <th>Thương hiệu</th>
               </tr>
-            {{/each}}
-          </tbody>
-        </table>           
+            </thead>
+            <tbody>
+              {{#each products}}
+                <tr class="product-row text-center" data-id="{{this._id}}">
+                  <td>{{inc @index}}</td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.price}}</td>
+                  <td>{{#each this.colors}}{{this}} {{/each}}</td>
+                  <td>{{#each this.size}}{{this}} {{/each}}</td>
+                  <td>{{this.stock}}</td>
+                  <td>{{this.brand_id.name}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>  
+        </div>         
       </div>
       
       <div class="d-flex justify-content-center">
