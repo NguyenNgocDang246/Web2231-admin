@@ -130,42 +130,15 @@
               class="d-flex align-items-center ms-auto justify-content-end"
               id="avt-section"
             >
-              <!-- Avatar và Đăng Xuất -->
-              <div class="dropdown">
-                <a
-                  href="#"
-                  class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                  id="userDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <img
-                    src="https://via.placeholder.com/40"
-                    alt="Avatar"
-                    class="rounded-circle me-2"
-                    style="width: 30px; height: 30px;"
-                  />
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
-                >
-                  <li><a class="dropdown-item fw-bold" href="#">Profile</a></li>
-                  <li><a
-                      class="dropdown-item fw-bold"
-                      href="#"
-                    >Settings</a></li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li><a
-                      class="dropdown-item text-danger fw-bold"
-                      href="/auth/logout"
-                    >Đăng xuất</a></li>
-                </ul>
-              </div>
+              <a
+                href="/auth/logout"
+                class="btn me-2"
+                id="logoutBtn"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+              </a>
             </div>
-          </div>
         </div>
       </nav>
     </header>

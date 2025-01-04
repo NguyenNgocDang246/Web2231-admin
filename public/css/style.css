@@ -149,3 +149,7 @@ a {
     width: 50%;
   }
 }
+
+#logoutBtn {
+  cursor: pointer;
+}

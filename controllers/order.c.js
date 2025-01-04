@@ -113,6 +113,8 @@ module.exports = {
         next(new CError(500, "Error get discount", error.message));
       }
 
+      console.log(orders);
+
       res.json({ orders, totalPages });
     } catch (error) {
       next(new CError(500, "Error get all orders", error.message));

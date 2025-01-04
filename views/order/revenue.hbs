@@ -233,10 +233,10 @@
                     <td>${order.totalAmount} VND</td>
                     <td>${order.discount.value} VND</td>
                     <td>
-                        ${order.status === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.status === 'pending' ? '<span class="badge bg-warning">Đang Xử Lý</span>' : '<span class="badge bg-danger">Không thành công</span>'}
+                        ${order.status === 'shipping' ? '<span class="badge bg-success">Đang vận chuyển</span>' : order.status === 'pending' ? '<span class="badge bg-warning">Đang Xử Lý</span>' : '<span class="badge bg-success">Thành công</span>'}
                     </td>
                     <td>
-                        ${order.paymentMethod === 'cod' ? '<span class="badge bg-primary">COD</span>' : '<span class="badge bg-info">Chuyển khoản</span>'}
+                        ${order.paymentMethod === 'COD' ? '<span class="badge bg-primary">COD</span>' : '<span class="badge bg-info">Chuyển khoản</span>'}
                     </td>
                     <td>
                         ${order.paymentStatus === 'paid' ? '<span class="badge bg-success">Đã Thanh Toán</span>' : order.paymentStatus === 'pending' ? '<span class="badge bg-warning">Chưa Thanh Toán</span>' : '<span class="badge bg-danger">Không thành công</span>'}
