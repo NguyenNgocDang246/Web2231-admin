@@ -32,4 +32,56 @@ const discountSchema = new mongoose.Schema({
 
 const Discount = mongoose.model("discount", discountSchema);
 
-module.exports = Discount;
+module.exports = {
+  all: async (page = 1, PER_PAGE = null) => {
+    try {
+      if (PER_PAGE === null) {
+        return Discount.find().lean();
+      }
+      return Discount.find()
+        .skip((page - 1) * PER_PAGE)
+        .limit(PER_PAGE)
+        .lean();
+    } catch (error) {
+      throw error;
+    }
+  },
+  count: async () => {
+    try {
+      return Discount.countDocuments();
+    } catch (error) {
+      throw error;
+    }
+  },
+  add: async (discount) => {
+    try {
+      await Discount.create(discount);
+    } catch (error) {
+      throw error;
+    }
+  },
+  one: async (id) => {
+    try {
+      const rs = await Discount.findById(id).lean();
+      rs.expiredAt = rs.expiredAt.toISOString().split("T")[0];
+      return rs;
+    } catch (error) {
+      throw error;
+    }
+  },
+  update: async (id, discount) => {
+    try {
+      await Discount.findByIdAndUpdate(id, discount);
+    } catch (error) {
+      throw error;
+    }
+  },
+  delete: async (id) => {
+    try {
+      await Discount.findByIdAndDelete(id);
+    } catch (error) {
+      throw error;
+    }
+  },
+  TYPES: ["percent", "fixed"],
+};

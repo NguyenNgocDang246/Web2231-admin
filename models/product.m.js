@@ -41,6 +41,9 @@ module.exports = {
       throw e;
     }
   },
+  count: async () => {
+    return await Product.countDocuments();
+  },
   one: async (id) => {
     try {
       const product = await Product.findById(id)
@@ -99,7 +102,6 @@ module.exports = {
   },
   update: async (id, product) => {
     try {
-      console.log("product", product);
       const updatedProduct = await Product.findByIdAndUpdate(id, product, {
         new: true,
       });
@@ -108,4 +110,23 @@ module.exports = {
       throw e;
     }
   },
+  colors: [
+    "Đỏ",
+    "Xanh",
+    "Vàng",
+    "Trắng",
+    "Đen",
+    "Be",
+    "Hồng",
+    "Xám",
+    "Cam",
+    "Nâu",
+    "Tím",
+    "Xanh lá",
+    "Xanh ngọc",
+    "Kem",
+    "Vàng nghệ",
+  ],
+  sizes: ["S", "M", "L", "XL", "XXL", "XXXL"],
+  genders: ["Nam", "Nữ", "Unisex"],
 };

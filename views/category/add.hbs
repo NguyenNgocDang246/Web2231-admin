@@ -1,0 +1,36 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container">
+                <h1 class="text-center mb-4 text-orange">Thêm Danh Mục</h1>
+                <div class="card border-orange">
+                    <div class="card-body">
+                        <form action="/category/add" method="POST">
+                            
+                            {{!-- Tên danh mục --}}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên danh mục</label>
+                                <input id="name" name="name" class="form-control" type="text" required>
+                            </div>
+
+                            {{!-- Mô tả --}}
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Mô tả</label>
+                                <textarea id="description" name="description" class="form-control" type="text" required></textarea>
+                            </div>
+                            
+                            <!-- Nút thêm -->
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-plus-circle"></i> Thêm danh mục
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

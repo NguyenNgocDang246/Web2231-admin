@@ -7,7 +7,7 @@
                 <h1 class="text-center mb-4 text-orange">Chi tiết sản phẩm</h1>
                 <div class="card border-orange">
                     <div class="card-body">
-                        <form action="/product/update/{{product._id}}" method="POST" enctype="multipart/form-data">
+                        <form action="/product/update/id={{product._id}}" method="POST" enctype="multipart/form-data">
                             <!-- Tên sản phẩm -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">Tên sản phẩm</label>
@@ -30,10 +30,10 @@
                             <div class="mb-3">
                                 <label for="gender" class="form-label">Giới tính</label>
                                 <input type="text" class="form-control" id="gender" name="gender" value="{{product.gender}}" hidden required>
-                                <input type="text" class="form-control" id="gender-name" placeholder="-- Chọn giới tính --" readonly required>
+                                <input type="text" class="form-control" id="gender-name" value="{{product.gender}}" placeholder="-- Chọn giới tính --" readonly required>
                                 <div id="gender-dropdown" class="dropdown-menu w-100" style="display: none;">
                                     {{#each genders}}
-                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this.name}}')">{{this.name}}</button>
+                                        <button type="button" class="dropdown-item" onclick="selectGender('{{this}}')">{{this}}</button>
                                     {{/each}}
                                 </div>
                             </div>
@@ -46,7 +46,7 @@
                                     type="text" 
                                     class="form-control" 
                                     id="category-name" 
-                                    value="" 
+                                    value=""
                                     readonly 
                                     onclick="toggleDropdown()"
                                 >
@@ -173,16 +173,92 @@
                             </div>
                             {{!-- Nút xóa sản phẩm và nút cập nhật sản phẩm --}}
                             <div class="d-flex justify-content-end">
-                                <a href="/product/delete/{{product._id}}" class="btn btn-danger mx-3 text-white">Xóa</a>
+                                <button
+                                    type="button"
+                                    class="btn btn-danger mx-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalId"
+                                >
+                                    Xóa
+                                </button>
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </div>
                         </form>
+
+                        <section style="background-color: #f7f6f6;">
+                            <div class="container my-5 py-5 text-body">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-md-12 col-lg-10 col-xl-8">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h4 class="text-body mb-0">Reviews</h4>
+                                        </div>
+
+                                        {{#each reviews}}
+                                            <div class="card mb-3 review-card" data-id="{{this._id}}">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-start">
+                                                    {{#if this.user.image}}
+                                                    <img class="rounded-circle shadow-1-strong me-3"
+                                                        src="{{this.user.image}}" alt="avatar" width="40" height="40" />
+                                                    {{else}}
+                                                    <img class="rounded-circle shadow-1-strong me-3"
+                                                        src="/images/default_avatar.jpg" alt="avatar" width="40" height="40" />
+                                                    {{/if}}
+                                                    <div class="w-100">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h6 class="text-primary fw-bold mb-0">
+                                                            {{this.user.name}}
+                                                            <span class="text-body ms-2">{{this.comment}}</span>
+                                                        </h6>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="small mb-0" style="color: #aaa;">
+                                                            <button style="cursor: pointer;" id="delete-review" class="link-grey" data-id="{{this._id}}">Remove</button>
+                                                            {{!-- <a href="#!" class="link-grey">Reply</a> •
+                                                            <a href="#!" class="link-grey">Translate</a> --}}
+                                                        </p>
+                                                        <div class="d-flex flex-row">
+                                                            <i class="fas fa-star text-warning me-2"> {{this.rating}}</i>
+                                                            <i class="far fa-check-circle" style="color: #aaa;"></i>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 </div>
+
+<script>
+    const product = {{{json product}}};
+    modalId.addEventListener('show.bs.modal', function (event) {
+        var modalId = document.getElementById('modalId');
+        var modalBodyText = document.getElementById('modalBodyText');
+        var modalLink = document.getElementById('modalLink');
+
+        modalBodyText.innerText = 'Bạn có chắc chắn muốn xóa sản phẩm này không?';
+        modalLink.onclick = function () {
+            fetch(`/product/delete/id=${product._id}`, {
+                method: 'DELETE',
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = '/product';
+                    }
+                });
+        };
+    });
+</script>
 
 <script>
     // Initialize selected categories, sizes, and colors with existing product data
@@ -446,11 +522,27 @@
         });
     });
 
-    // Call update functions to display initial selections
     updateSelectedCategories();
     updateSelectedSizes();
     updateSelectedColors();
 
-    // Set hidden input value for images
     document.getElementById('hid-img').value = selectedImages.join(',');
+
+    document.getElementById('delete-review').addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        fetch(`/product/reviews/remove/id=${id}`, {
+            method: 'DELETE',
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    const reviewCard = document.querySelectorAll(".review-card");
+                    reviewCard.forEach(review => {
+                        if (review.getAttribute("data-id") === id) review.style.display = 'none';
+                    })
+                    toastr.success(data.message, "Thành công");
+                }
+            });
+
+    });
 </script>

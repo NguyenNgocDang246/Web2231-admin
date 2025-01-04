@@ -1,0 +1,72 @@
+<div class="container-fluid main-body">
+    <div class="row">
+        {{> navbar}}
+
+        <main class="col-md-12 content main-content">
+            <div class="container">
+                <h1 class="text-center mb-4 text-orange">Chi Tiết Danh Mục</h1>
+                <div class="card border-orange">
+                    <div class="card-body">
+                        <form action="/category/update/{{category._id}}" method="POST">
+                            
+                            {{!-- Tên danh mục --}}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên danh mục</label>
+                                <input id="name" name="name" class="form-control" type="text" value="{{category.name}}">
+                            </div>
+
+                            {{!-- Mô tả --}}
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Mô tả</label>
+                                <textarea id="description" name="description" class="form-control" type="text">{{category.description}}</textarea>
+                            </div>
+                            
+                            {{!-- Nút xóa danh mục và nút cập nhật danh mục --}}
+                            <div class="d-flex justify-content-end">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                    Xóa
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Xóa Danh Mục</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa danh mục này không?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <button data-id="{{category._id}}" id="deleteBtn" class="btn btn-danger text-white">Xóa</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    document.getElementById('deleteBtn').addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        fetch(`/category/delete/${id}`, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = '/category';
+            }
+        })
+        .catch(err => console.log(err));
+    });
+</script>
