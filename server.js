@@ -117,20 +117,20 @@ connectDB()
       next();
     });
 
-    // const https = require('https');
-    // const fs = require('fs');
-    // const privateKey = fs.readFileSync('./sslkeys/key.pem', 'utf8');
-    // const certificate = fs.readFileSync('./sslkeys/cert.pem', 'utf8');
-    // const credentials = { key: privateKey, cert: certificate };
-    // const httpsServer = https.createServer(credentials, app);
-    // httpsServer.listen(PORT, () => {
-    //     console.log(`Server running at https://localhost:${PORT}`);
-    // });
+    const https = require('https');
+    const fs = require('fs');
+    const privateKey = fs.readFileSync('./sslkeys/key.pem', 'utf8');
+    const certificate = fs.readFileSync('./sslkeys/cert.pem', 'utf8');
+    const credentials = { key: privateKey, cert: certificate };
+    const httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(PORT, () => {
+        console.log(`Server running at https://localhost:${PORT}`);
+    });
 
     // Khởi động server
-    app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
-    });
+    // app.listen(PORT, () => {
+    //   console.log(`Server running at http://localhost:${PORT}`);
+    // });
   })
   .catch((error) => {
     console.error("Failed to connect to MongoDB:", error);
