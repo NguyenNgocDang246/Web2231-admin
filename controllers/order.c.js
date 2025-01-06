@@ -90,7 +90,8 @@ module.exports = {
   },
   list: async (req, res, next) => {
     try {
-      const { from, to } = req.body;
+      const { from, to } = req.query;
+      console.log(from, to);
       const currentPage = req.query.page || 1;
       const orders = await orderModel.all(currentPage, PER_PAGE, from, to);
       const totalOrders = await orderModel.countByDate(from, to);
@@ -112,8 +113,6 @@ module.exports = {
         console.log("Error get discount", error.message);
         next(new CError(500, "Error get discount", error.message));
       }
-
-      console.log(orders);
 
       res.json({ orders, totalPages });
     } catch (error) {
