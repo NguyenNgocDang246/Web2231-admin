@@ -213,15 +213,11 @@
             
             document.querySelector('.p-page').children[0].setAttribute('data-page', currentPage - 1);
             document.querySelector('.n-page').children[0].setAttribute('data-page', currentPage + 1);
-
+            const from = document.querySelector('#from').value;
+            const to = document.querySelector('#to').value;
+            
             changeActive();
-            fetch(`/order/list?page=${page}`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ from: document.querySelector('#from').value, to: document.querySelector('#to').value}),
-            })
+            fetch(`/order/list?page=${page}&from=${from}&to=${to}`)
             .then(res => res.json())
             .then(data => {
                 let html = '';
@@ -256,14 +252,11 @@
 
     // Search Order
     document.querySelector('#order-form').addEventListener('submit', function(e) {
+        const from = document.querySelector('#from').value;
+        const to = document.querySelector('#to').value;
         e.preventDefault();
-        fetch(`/order/list?page=1`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ from: document.querySelector('#from').value, to: document.querySelector('#to').value}),
-        })
+
+        fetch(`/order/list?page=1&from=${from}&to=${to}`)
         .then(res => res.json())
         .then(data => {
             let html = '';
