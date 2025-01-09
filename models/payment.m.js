@@ -1,3 +1,4 @@
+const { create } = require("hbs");
 const mongoose = require("mongoose");
 
 // Định nghĩa schema cho User
@@ -6,11 +7,26 @@ const bankAccountSchema = new mongoose.Schema({
   balance: { type: Number },
 });
 
+const paymentLogSchema = new mongoose.Schema({
+  id_receiver: { type: String, required: true },
+  id_sender: { type: String, required: true },
+  amount: { type: Number },
+  date: { type: Date, default: Date.now() },
+  description: { type: String },
+  status: { type: String , default: "pending"},
+})
+
 // Tạo model từ schema
 const BankAccount = mongoose.model(
   "BankAccount",
   bankAccountSchema,
   "bankAccounts"
+);
+
+const PaymentLog = mongoose.model(
+  "PaymentLog",
+  paymentLogSchema,
+  "paymentLogs"
 );
 
 let initalized = false;
@@ -91,6 +107,15 @@ module.exports = {
     try {
       const newAccount = await BankAccount.create(account);
       return newAccount;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  },
+  createPaymentLog: async (paymentLog) => {
+    await ensureInitalized();
+    try {
+      const newPaymentLog = await PaymentLog.create(paymentLog);
+      return newPaymentLog;
     } catch (e) {
       console.error("Error:", e);
     }

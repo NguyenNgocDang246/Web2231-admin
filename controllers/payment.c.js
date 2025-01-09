@@ -36,10 +36,23 @@ module.exports = {
     if(!userAccount)
         return res.status(200).json({message: "User not found"});
 
+    const paymentLog = {
+      id_receiver: shopAccount.id_user,
+      id_sender: user.id,
+      amount: amount,
+      description: req.body.description || "Transfer money",
+    }
+
     if(amount > userAccount.balance)
+    {
+        paymentLog.status = "fail";
         return res.status(200).json({message: "Not enough balance"});
+    }
     const result1 = await model.updateBalance(user.id, userAccount.balance - amount);
     const result2 = await model.updateBalance("-1", shopAccount.balance + amount);
+
+    paymentLog.status = "success";
+    await model.createPaymentLog(paymentLog);
     return res.status(200).json({message: "success"});
   },
   authenticateToken: (req, res, next) => {
